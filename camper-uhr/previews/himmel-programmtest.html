@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=1480, initial-scale=1">
+  <link rel="stylesheet" href="../frontend/css/layout.css">
+  <link rel="stylesheet" href="../frontend/css/modern.css">
+  <style>html,body{width:1480px;height:320px}#stage{--stage-width:1480px;--stage-height:320px}</style>
+</head>
+<body>
+  <div id="stage"><div id="screens"></div></div>
+  <script src="../frontend/js/screens/sun.js"></script>
+  <script>
+    const screen = createSunScreen();
+    document.getElementById("screens").appendChild(screen.element);
+    screen.onTick({
+      server_time_iso: "2026-09-10T21:17:00+02:00",
+      weather: {
+        available: true,
+        sunrise: "2026-09-10T06:43",
+        sunset: "2026-09-10T19:36",
+        daylight_duration_seconds: 46410.97
+      },
+      moon: {
+        phase_name: "Neumond",
+        illumination_pct: 1,
+        phase_fraction: 0.974,
+        moonrise: "2026-09-10T05:41",
+        moonset: "2026-09-10T19:13"
+      }
+    });
+  </script>
+</body>
+</html>

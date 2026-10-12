@@ -1,0 +1,1115 @@
+.card-row {
+  display: flex;
+  gap: 48px;
+  align-items: stretch;
+  justify-content: center;
+}
+
+.info-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-width: 220px;
+  padding: 22px 36px;
+  border-radius: 20px;
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.015));
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(2px);
+}
+
+.info-card-icon {
+  font-size: 30px;
+  line-height: 1;
+  margin-bottom: 4px;
+  filter: drop-shadow(0 0 6px currentColor);
+}
+
+.info-card-value {
+  font-family: "Segoe UI", Roboto, sans-serif;
+  font-size: 66px;
+  font-weight: 200;
+  letter-spacing: -1px;
+  line-height: 1;
+  color: var(--accent, #4fd1ff);
+  text-shadow: 0 0 18px color-mix(in srgb, var(--accent, #4fd1ff) 65%, transparent);
+}
+
+.info-card-unit {
+  font-size: 24px;
+  font-weight: 300;
+  margin-left: 6px;
+  opacity: 0.7;
+}
+
+.info-card-label {
+  font-family: "Segoe UI", Roboto, sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: #9aa0a6;
+}
+
+.info-card.accent-distance { --accent: #46e0c0; }
+.info-card.accent-speed { --accent: #4fb4ff; }
+
+.weather-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.weather-icon {
+  font-size: 72px;
+  line-height: 1;
+  filter: drop-shadow(0 0 16px rgba(255, 200, 120, 0.5));
+}
+
+.weather-temp {
+  font-family: "Segoe UI", Roboto, sans-serif;
+  font-size: 96px;
+  font-weight: 200;
+  letter-spacing: -2px;
+  line-height: 1;
+  color: #ffcf7d;
+  text-shadow: 0 0 26px rgba(255, 190, 110, 0.55);
+}
+
+.weather-unit {
+  font-size: 36px;
+  font-weight: 300;
+  opacity: 0.7;
+  margin-left: 4px;
+}
+
+.weather-condition {
+  font-family: "Segoe UI", Roboto, sans-serif;
+  font-size: 18px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #9aa0a6;
+}
+
+.weather-layout {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0 56px;
+  gap: 40px;
+}
+
+.forecast-row {
+  display: flex;
+  flex: 1;
+  justify-content: space-evenly;
+  gap: 16px;
+}
+
+.forecast-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  min-width: 110px;
+  padding: 14px 16px;
+  border-radius: 16px;
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.015));
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.forecast-day {
+  font-family: "Segoe UI", Roboto, sans-serif;
+  font-size: 13px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #9aa0a6;
+}
+
+.forecast-icon {
+  font-size: 32px;
+  line-height: 1;
+  filter: drop-shadow(0 0 8px rgba(255, 200, 120, 0.4));
+}
+
+.temp-range-bar {
+  width: 8px;
+  height: 60px;
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.08);
+  position: relative;
+  overflow: hidden;
+}
+
+.temp-range-fill {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: linear-gradient(180deg, #ff8c3a, #ffcf7d);
+  border-radius: 5px;
+}
+
+.forecast-temps {
+  display: flex;
+  gap: 8px;
+  font-family: "Segoe UI", Roboto, sans-serif;
+  font-size: 15px;
+}
+
+.forecast-temps .temp-max {
+  color: #ffcf7d;
+  font-weight: 600;
+}
+
+.forecast-temps .temp-min {
+  color: #7ab8ff;
+}
+
+.forecast-precip {
+  font-family: "Segoe UI", Roboto, sans-serif;
+  font-size: 12px;
+  color: #9aa0a6;
+}
+
+/* Panoramic weather scene, optimized for the native 1480x320 display. */
+.weather-screen {
+  color: #f6fbff;
+}
+
+.weather-scene {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: url("../assets/weather/weather-landscape.png") center 55% / cover no-repeat;
+}
+
+.weather-scene::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(90deg, rgba(2, 8, 13, 0.88) 0%, rgba(3, 10, 16, 0.68) 24%, rgba(3, 10, 16, 0.10) 43%, rgba(2, 8, 14, 0.30) 55%, rgba(2, 8, 14, 0.64) 100%),
+    linear-gradient(0deg, rgba(2, 7, 10, 0.40), transparent 58%);
+}
+
+.weather-current {
+  position: absolute;
+  z-index: 2;
+  inset: 20px auto 18px 30px;
+  width: 360px;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+}
+
+.weather-eyebrow {
+  color: #b9d2e3;
+  font-size: 13px;
+  font-weight: 650;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+}
+
+.weather-current-main {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.weather-current-temp {
+  font-size: 130px;
+  line-height: 0.86;
+  font-weight: 240;
+  letter-spacing: -8px;
+  text-shadow: 0 4px 24px rgba(0, 0, 0, 0.45);
+}
+
+.weather-current-condition {
+  padding-top: 12px;
+}
+
+.weather-current-condition strong {
+  display: block;
+  width: 150px;
+  font-size: 20px;
+  line-height: 1.05;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.weather-current-condition span {
+  display: block;
+  margin-top: 9px;
+  color: #d4e1e9;
+  font-size: 15px;
+}
+
+.weather-current-details {
+  display: flex;
+  gap: 12px;
+}
+
+.weather-detail {
+  min-width: 124px;
+  padding: 8px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.20);
+  border-radius: 9px;
+  background: rgba(3, 10, 16, var(--panel-opacity, 0.52));
+  backdrop-filter: blur(var(--panel-blur, 0px)) saturate(1.12);
+}
+
+.weather-detail small {
+  display: block;
+  color: #9fb3c1;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.8px;
+  text-transform: uppercase;
+}
+
+.weather-detail b {
+  display: block;
+  margin-top: 2px;
+  font-size: 19px;
+  font-weight: 550;
+}
+
+.weather-location {
+  position: absolute;
+  z-index: 2;
+  left: 340px;
+  width: 300px;
+  box-sizing: border-box;
+  bottom: 18px;
+  padding: 7px 12px;
+  border-radius: 8px;
+  color: #e9f4fa;
+  background: rgba(2, 8, 12, var(--panel-opacity, 0.52));
+  backdrop-filter: blur(var(--panel-blur, 0px)) saturate(1.12);
+  font-size: 12px;
+  letter-spacing: 1.8px;
+  text-transform: uppercase;
+}
+
+.weather-forecast {
+  position: absolute;
+  z-index: 2;
+  top: 12px;
+  right: 14px;
+  bottom: 12px;
+  width: 800px;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.weather-day {
+  min-width: 0;
+  padding: 17px 15px 13px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 12px;
+  background: linear-gradient(180deg, rgba(7, 18, 27, var(--panel-opacity, 0.52)), rgba(3, 9, 14, var(--panel-opacity, 0.52)));
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+  backdrop-filter: blur(var(--panel-blur, 0px)) saturate(1.12);
+}
+
+.weather-day-today {
+  border-color: rgba(132, 211, 255, 0.74);
+  background: linear-gradient(180deg, rgba(14, 42, 61, var(--panel-opacity, 0.52)), rgba(3, 12, 19, var(--panel-opacity, 0.52)));
+}
+
+.weather-day-name {
+  color: #d7e9f4;
+  font-size: 13px;
+  font-weight: 750;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.weather-day-icon {
+  font-size: 60px;
+  line-height: 1;
+  filter: drop-shadow(0 4px 9px rgba(0, 0, 0, 0.35));
+}
+
+.weather-day-range {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+
+.weather-day-high {
+  font-size: 40px;
+  font-weight: 420;
+}
+
+.weather-day-low {
+  color: #aac0ce;
+  font-size: 18px;
+}
+
+.weather-day-rain {
+  width: 100%;
+  padding-top: 6px;
+  border-top: 1px solid rgba(255, 255, 255, 0.24);
+  color: #b9e7ff;
+  text-align: center;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.8);
+}
+
+.weather-day-rain-probability {
+  display: block;
+  font-size: 23px;
+  line-height: 1.05;
+  font-weight: 720;
+}
+
+.weather-day-rain-amount {
+  display: block;
+  margin-top: 3px;
+  color: #f0f8fc;
+  font-size: 18px;
+  line-height: 1.05;
+  font-weight: 650;
+  letter-spacing: 0.1px;
+}
+
+.route-graphic {
+  position: relative;
+  width: 100%;
+  height: 220px;
+  padding: 0 40px;
+}
+
+.route-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  font-family: "Segoe UI", Roboto, sans-serif;
+  font-size: 20px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #667;
+}
+
+.route-content {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.route-track {
+  position: absolute;
+  top: 50%;
+  left: 90px;
+  right: 90px;
+  height: 3px;
+  transform: translateY(-50%);
+  background-image: repeating-linear-gradient(
+    90deg,
+    rgba(70, 224, 192, 0.6) 0,
+    rgba(70, 224, 192, 0.6) 14px,
+    transparent 14px,
+    transparent 26px
+  );
+}
+
+.route-marker {
+  position: absolute;
+  top: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.route-marker-start {
+  left: 90px;
+  transform: translate(-50%, -60%);
+}
+
+.route-marker-dest {
+  right: 90px;
+  transform: translate(50%, -60%);
+}
+
+.route-marker-icon {
+  font-size: 38px;
+  filter: drop-shadow(0 0 8px rgba(70, 224, 192, 0.5));
+}
+
+.route-marker-label {
+  font-family: "Segoe UI", Roboto, sans-serif;
+  font-size: 13px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: #9aa0a6;
+  max-width: 140px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.route-camper {
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -80%);
+  font-size: 46px;
+  transition: left 1s linear;
+  filter: drop-shadow(0 0 10px rgba(255, 140, 58, 0.6));
+}
+
+.sky-screen {
+  --sky-line: rgba(255, 255, 255, 0.20);
+  --sky-muted: rgba(230, 240, 255, 0.74);
+  --sky-sun: #ffd36b;
+  --sky-moon: #dff1ff;
+  --sky-cyan: #77ddff;
+  color: #fff;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.75);
+}
+
+.sky-scene {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  padding: 15px 18px;
+  display: grid;
+  grid-template-columns: 388px minmax(0, 1fr) 388px;
+  gap: 14px;
+  background:
+    linear-gradient(90deg, rgba(10, 10, 20, 0.10), rgba(6, 12, 28, 0.28) 48%, rgba(1, 8, 22, 0.25)),
+    linear-gradient(180deg, rgba(0, 0, 0, 0.08), rgba(0, 0, 0, 0.24)),
+    url("../assets/sky/sky-panorama.png") center 52% / cover no-repeat;
+}
+
+.sky-glass {
+  background: linear-gradient(145deg, rgba(15, 28, 51, var(--panel-opacity, 0.52)), rgba(5, 15, 32, var(--panel-opacity, 0.52)));
+  border: 1px solid var(--sky-line);
+  border-radius: 24px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 12px 36px rgba(0, 0, 0, 0.24);
+  backdrop-filter: blur(var(--panel-blur, 0px)) saturate(1.12);
+}
+
+.sky-side {
+  height: 290px;
+  padding: 18px 20px 16px;
+  display: grid;
+  grid-template-rows: 96px 1fr;
+}
+
+.sky-identity {
+  display: flex;
+  align-items: center;
+  gap: 17px;
+  min-width: 0;
+}
+
+.sky-identity-copy {
+  min-width: 0;
+}
+
+.sky-eyebrow {
+  color: var(--sky-muted);
+  font-size: 14px;
+  line-height: 1.1;
+  letter-spacing: 0.15em;
+  font-weight: 800;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sky-name {
+  margin-top: 3px;
+  font-weight: 760;
+  font-size: 29px;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.sky-sun-panel .sky-name {
+  max-width: 225px;
+  white-space: normal;
+  line-height: 0.98;
+}
+
+.sky-status {
+  margin-top: 7px;
+  font-size: 16px;
+  color: rgba(255, 255, 255, 0.88);
+  white-space: nowrap;
+}
+
+.sky-sun-orb,
+.sky-moon-orb {
+  position: relative;
+  width: 78px;
+  height: 78px;
+  flex: none;
+  border-radius: 50%;
+}
+
+.sky-sun-orb {
+  background: radial-gradient(circle at 37% 35%, #fff9c4 0 8%, #ffe16e 31%, #ff9e31 72%, #f26b21 100%);
+  box-shadow: 0 0 16px #ffd66f, 0 0 40px rgba(255, 163, 58, 0.72), 0 0 68px rgba(255, 113, 27, 0.30);
+}
+
+.sky-sun-orb::after {
+  content: "";
+  position: absolute;
+  inset: -11px;
+  border: 1px solid rgba(255, 216, 118, 0.28);
+  border-radius: 50%;
+}
+
+.sky-moon-orb {
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 63% 26%, rgba(105, 128, 147, 0.40) 0 4%, transparent 5%),
+    radial-gradient(circle at 32% 63%, rgba(103, 124, 145, 0.34) 0 7%, transparent 8%),
+    radial-gradient(circle at 56% 72%, rgba(91, 112, 133, 0.30) 0 5%, transparent 6%),
+    radial-gradient(circle at 35% 35%, #fff 0, #e5f4fd 45%, #b4cadb 100%);
+  box-shadow: 0 0 18px rgba(222, 242, 255, 0.75), 0 0 48px rgba(105, 184, 255, 0.36);
+}
+
+.sky-moon-shadow {
+  position: absolute;
+  inset: -3px;
+  border-radius: 50%;
+  background: rgba(6, 15, 34, 0.94);
+  transition: transform 1s ease, clip-path 1s ease, opacity 1s ease;
+}
+
+.sky-moon-phase-0 .sky-moon-shadow { inset: -2px; opacity: 0.97; }
+.sky-moon-phase-1 .sky-moon-shadow { transform: translateX(-18px); }
+.sky-moon-phase-2 .sky-moon-shadow { inset: -2px 50% -2px -2px; border-radius: 42px 0 0 42px; }
+.sky-moon-phase-3 .sky-moon-shadow { transform: translateX(-55px); }
+.sky-moon-phase-4 .sky-moon-shadow { opacity: 0; }
+.sky-moon-phase-5 .sky-moon-shadow { transform: translateX(55px); }
+.sky-moon-phase-6 .sky-moon-shadow { inset: -2px -2px -2px 50%; border-radius: 0 42px 42px 0; }
+.sky-moon-phase-7 .sky-moon-shadow { transform: translateX(18px); }
+
+.sky-metric-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  align-self: end;
+}
+
+.sky-metric {
+  min-height: 78px;
+  padding: 11px 13px;
+  border-radius: 15px;
+  background: rgba(7, 16, 33, 0.43);
+  border: 1px solid rgba(255, 255, 255, 0.13);
+}
+
+.sky-metric-label,
+.sky-summary-label {
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.10em;
+  color: var(--sky-muted);
+}
+
+.sky-metric-value {
+  margin-top: 3px;
+  font-size: 30px;
+  line-height: 1;
+  font-weight: 780;
+  font-variant-numeric: tabular-nums;
+}
+
+.sky-metric-sub {
+  margin-top: 5px;
+  color: rgba(236, 244, 255, 0.72);
+  font-size: 13px;
+}
+
+.sky-sun-panel .sky-metric-value { color: #fff4c2; }
+.sky-moon-panel .sky-metric-value { color: #e7f6ff; }
+
+.sky-center {
+  position: relative;
+  height: 290px;
+  padding: 13px 22px 15px;
+  overflow: hidden;
+}
+
+.sky-center-top {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  position: relative;
+  z-index: 2;
+}
+
+.sky-center-title {
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: 0.11em;
+}
+
+.sky-date {
+  font-size: 14px;
+  color: var(--sky-muted);
+  font-weight: 650;
+  text-transform: capitalize;
+}
+
+.sky-arc {
+  position: absolute;
+  left: 26px;
+  right: 26px;
+  top: 42px;
+  height: 145px;
+}
+
+.sky-arc svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.sky-arc-shadow,
+.sky-arc-line {
+  fill: none;
+  stroke-linecap: round;
+}
+
+.sky-arc-shadow { stroke: rgba(255, 255, 255, 0.18); stroke-width: 8; }
+.sky-arc-line { stroke: url("#sky-day-arc"); stroke-width: 3; }
+
+.sky-now-dot {
+  fill: #ffc955;
+  stroke: #fff1b5;
+  stroke-width: 2;
+  filter: drop-shadow(0 0 10px rgba(255, 187, 67, 0.95));
+  transition: cx 1s linear, cy 1s linear;
+}
+
+.sky-now-dot-night {
+  fill: #98cfff;
+  stroke: #d9efff;
+  filter: drop-shadow(0 0 9px rgba(94, 177, 255, 0.95));
+}
+
+.sky-now-label {
+  position: absolute;
+  transform: translateX(-50%);
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+  transition: left 1s linear, top 1s linear;
+}
+
+.sky-horizon {
+  position: absolute;
+  left: 26px;
+  right: 26px;
+  top: 184px;
+  border-top: 1px solid rgba(255, 255, 255, 0.34);
+}
+
+.sky-horizon::before {
+  content: "HORIZONT";
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 0 10px;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  color: rgba(236, 244, 255, 0.67);
+  background: rgba(9, 19, 38, 0.62);
+}
+
+.sky-summary {
+  position: absolute;
+  left: 22px;
+  right: 22px;
+  bottom: 15px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.sky-summary-item {
+  height: 67px;
+  border-radius: 14px;
+  background: rgba(7, 16, 33, 0.43);
+  border: 1px solid rgba(255, 255, 255, 0.13);
+  text-align: center;
+  padding: 8px 8px 6px;
+}
+
+.sky-summary-label { font-size: 12px; }
+
+.sky-summary-value {
+  margin-top: 2px;
+  font-size: 22px;
+  font-weight: 780;
+}
+
+.sky-gold { color: var(--sky-sun); }
+.sky-blue { color: var(--sky-cyan); }
+
+.sky-visibility {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.sky-visibility::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  flex: none;
+  border-radius: 50%;
+  background: #8af0bd;
+  box-shadow: 0 0 10px #49e99b;
+}
+
+.sky-visibility.sky-below::before {
+  background: #92a1b7;
+  box-shadow: none;
+}
+
+/* Date and vacation module: active-trip and yearly overview states. */
+.vacation-screen {
+  color: #fff;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.75);
+}
+
+.vacation-sync-note {
+  position: absolute;
+  right: 24px;
+  bottom: 1px;
+  max-width: 500px;
+  overflow: hidden;
+  white-space: nowrap;
+  font-size: 10px;
+  color: #ffe0a3;
+  text-shadow: 0 1px 3px #000;
+}
+
+.vacation-scene {
+  width: 100%;
+  height: 100%;
+  padding: 15px 18px;
+  display: grid;
+  grid-template-columns: 300px minmax(0, 1fr) 310px;
+  gap: 14px;
+  background:
+    linear-gradient(90deg, rgba(6, 15, 26, 0.16), rgba(4, 14, 27, 0.32) 55%, rgba(3, 12, 25, 0.36)),
+    linear-gradient(180deg, rgba(1, 8, 18, 0.08), rgba(1, 8, 18, 0.30)),
+    url("../assets/calendar/vacation-panorama.png") center 49% / cover no-repeat;
+}
+
+.vacation-glass {
+  height: 290px;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 24px;
+  background: linear-gradient(145deg, rgba(13, 28, 42, var(--panel-opacity, 0.52)), rgba(5, 18, 31, var(--panel-opacity, 0.52)));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.10), 0 12px 36px rgba(0, 0, 0, 0.24);
+  backdrop-filter: blur(var(--panel-blur, 0px)) saturate(1.12);
+}
+
+.vacation-eyebrow {
+  color: rgba(233, 245, 255, 0.76);
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.vacation-date-card {
+  padding: 20px 24px;
+  display: flex;
+  flex-direction: column;
+}
+
+.vacation-weekday {
+  margin-top: 7px;
+  font-size: 25px;
+  line-height: 1;
+  font-weight: 720;
+  text-transform: capitalize;
+}
+
+.vacation-date-main {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-top: 10px;
+}
+
+.vacation-day {
+  color: #fff2bf;
+  font-size: 104px;
+  line-height: 0.82;
+  font-weight: 820;
+  letter-spacing: -0.07em;
+}
+
+.vacation-month-year { margin-top: 4px; min-width: 0; }
+
+.vacation-month {
+  color: #ffd36b;
+  max-width: 134px;
+  overflow: hidden;
+  font-size: 21px;
+  line-height: 1;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  white-space: nowrap;
+  text-transform: uppercase;
+}
+
+.vacation-year {
+  margin-top: 7px;
+  color: rgba(238, 247, 255, 0.78);
+  font-size: 22px;
+  font-weight: 650;
+  letter-spacing: 0.08em;
+}
+
+.vacation-season-note {
+  margin-top: auto;
+  padding: 11px 13px;
+  border-radius: 14px;
+  background: rgba(6, 18, 30, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.13);
+}
+
+.vacation-season-note-title {
+  color: rgba(232, 243, 255, 0.70);
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+}
+
+.vacation-season-note-copy { margin-top: 3px; font-size: 18px; font-weight: 700; }
+
+.vacation-trip-card { position: relative; padding: 17px 24px 15px; overflow: hidden; }
+.vacation-trip-top { display: flex; justify-content: space-between; align-items: start; }
+.vacation-trip-title { margin-top: 2px; max-width: 470px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 29px; line-height: 1; font-weight: 780; }
+.vacation-trip-destination { margin-top: 6px; max-width: 470px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: #ffd98a; font-size: 14px; font-weight: 720; letter-spacing: 0.03em; }
+.vacation-trip-range { text-align: right; color: rgba(235, 245, 255, 0.80); font-size: 15px; font-weight: 700; }
+.vacation-trip-range b { display: block; margin-top: 3px; color: #fff; font-size: 20px; }
+.vacation-timeline { position: absolute; left: 42px; right: 42px; top: 128px; height: 86px; }
+.vacation-track { position: absolute; left: 0; right: 0; top: 30px; height: 11px; border-radius: 10px; background: rgba(225, 240, 248, 0.22); border: 1px solid rgba(255, 255, 255, 0.28); box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.28); }
+.vacation-track-fill { height: 100%; border-radius: 10px; background: linear-gradient(90deg, #ffab43, #ffd86e); box-shadow: 0 0 16px rgba(255, 190, 72, 0.58); transition: width 1s ease; }
+.vacation-marker { position: absolute; top: 0; transform: translateX(-50%); width: 74px; text-align: center; transition: left 1s ease; }
+.vacation-camper { position: relative; width: 48px; height: 24px; margin: 0 auto; border-radius: 7px 7px 4px 4px; background: linear-gradient(135deg, #fff7da, #dbeaf3); border: 2px solid #fff; box-shadow: 0 0 14px rgba(255, 211, 107, 0.78), 0 4px 8px rgba(0, 0, 0, 0.38); }
+.vacation-camper::before { content: ""; position: absolute; left: 5px; top: 4px; width: 15px; height: 8px; border-radius: 2px; background: #65b7db; box-shadow: 20px 0 0 #65b7db; }
+.vacation-camper::after { content: ""; position: absolute; left: 6px; bottom: -7px; width: 9px; height: 9px; border-radius: 50%; background: #172331; border: 2px solid #9eabb6; box-shadow: 27px 0 0 -2px #172331, 27px 0 0 0 #9eabb6; }
+.vacation-today-pill { display: inline-block; margin-top: 8px; padding: 3px 8px; border-radius: 9px; color: #18202a; background: #ffd36b; font-size: 11px; font-weight: 900; letter-spacing: 0.08em; text-shadow: none; }
+.vacation-track-start, .vacation-track-end { position: absolute; top: 23px; width: 25px; height: 25px; border-radius: 50%; background: #ffaf49; border: 3px solid #ffe2a4; box-shadow: 0 0 14px rgba(255, 179, 73, 0.55); }
+.vacation-track-start { left: -5px; }
+.vacation-track-end { right: -5px; background: #79d6ff; border-color: #d3f2ff; box-shadow: 0 0 14px rgba(93, 196, 255, 0.52); }
+.vacation-timeline-label { position: absolute; top: 56px; color: rgba(235, 245, 255, 0.78); font-size: 13px; font-weight: 700; }
+.vacation-timeline-label b { color: #fff; font-size: 16px; }
+.vacation-label-start { left: 0; }
+.vacation-label-end { right: 0; text-align: right; }
+.vacation-trip-footer { position: absolute; left: 24px; right: 24px; bottom: 16px; padding-top: 11px; border-top: 1px solid rgba(255, 255, 255, 0.18); display: flex; justify-content: space-between; gap: 15px; color: rgba(237, 246, 255, 0.76); font-size: 14px; }
+.vacation-trip-footer b { color: #fff; }
+
+.vacation-progress-card, .vacation-countdown-card { padding: 18px 22px 15px; display: grid; grid-template-rows: 142px 1fr; }
+.vacation-progress-top, .vacation-countdown-top { display: flex; align-items: center; gap: 17px; }
+.vacation-ring, .vacation-count-ring { position: relative; width: 112px; height: 112px; flex: none; border-radius: 50%; box-shadow: 0 0 25px rgba(255, 181, 58, 0.22); }
+.vacation-ring { background: conic-gradient(#ffd36b 0 var(--progress), rgba(255, 255, 255, 0.17) var(--progress) 100%); }
+.vacation-count-ring { background: conic-gradient(#ffad4d 0 var(--year-progress), rgba(255, 255, 255, 0.17) var(--year-progress) 100%); }
+.vacation-ring::before, .vacation-count-ring::before { content: ""; position: absolute; inset: 11px; border-radius: 50%; background: rgba(7, 20, 34, 0.92); border: 1px solid rgba(255, 255, 255, 0.16); }
+.vacation-ring > div { position: absolute; inset: 0; z-index: 1; display: flex; align-items: center; justify-content: center; color: #fff0b0; font-size: 30px; font-weight: 820; }
+.vacation-progress-copy, .vacation-next-copy { min-width: 0; }
+.vacation-progress-big, .vacation-next-big { margin-top: 5px; color: #fff; font-size: 25px; line-height: 1.04; font-weight: 800; overflow: hidden; text-overflow: ellipsis; }
+.vacation-progress-small, .vacation-next-small { margin-top: 8px; color: rgba(236, 245, 255, 0.74); font-size: 14px; }
+.vacation-next-destination { margin-top: 5px; max-width: 145px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: #ffd98a; font-size: 13px; font-weight: 720; }
+.vacation-stats { align-self: end; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.vacation-stat { height: 96px; padding: 12px 7px; border-radius: 15px; background: rgba(6, 18, 31, 0.46); border: 1px solid rgba(255, 255, 255, 0.13); text-align: center; }
+.vacation-stat-label { color: rgba(232, 243, 255, 0.70); font-size: 12px; font-weight: 800; letter-spacing: 0.10em; }
+.vacation-stat-value { margin-top: 5px; color: #fff; font-size: 29px; line-height: 1; font-weight: 820; }
+.vacation-stat-unit { margin-top: 5px; color: rgba(236, 245, 255, 0.70); font-size: 13px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+.vacation-year-card { position: relative; padding: 16px 24px 15px; overflow: hidden; }
+.vacation-year-top { display: flex; justify-content: space-between; align-items: start; }
+.vacation-year-title { margin-top: 2px; font-size: 29px; line-height: 1; font-weight: 780; }
+.vacation-year-day { text-align: right; color: rgba(235, 245, 255, 0.78); font-size: 14px; font-weight: 700; }
+.vacation-year-day b { display: block; margin-top: 3px; color: #fff; font-size: 21px; }
+.vacation-seasons { position: absolute; left: 34px; right: 34px; top: 75px; height: 40px; display: flex; gap: 3px; }
+.vacation-season { flex: none; min-width: 0; border-radius: 9px; padding: 4px 7px 3px; border: 1px solid rgba(255, 255, 255, 0.15); font-size: 11px; line-height: 1.05; font-weight: 850; letter-spacing: 0.07em; text-align: center; text-shadow: 0 1px 5px rgba(0, 0, 0, 0.55); overflow: hidden; }
+.vacation-season small { display: block; margin-top: 3px; color: rgba(255, 255, 255, 0.76); font-size: 9px; font-weight: 700; letter-spacing: 0.03em; white-space: nowrap; }
+.vacation-winter { background: linear-gradient(90deg, rgba(102, 178, 226, 0.54), rgba(126, 194, 235, 0.38)); }
+.vacation-spring { background: linear-gradient(90deg, rgba(97, 181, 115, 0.50), rgba(126, 201, 131, 0.36)); }
+.vacation-summer { background: linear-gradient(90deg, rgba(245, 184, 68, 0.55), rgba(255, 208, 91, 0.36)); }
+.vacation-autumn { background: linear-gradient(90deg, rgba(220, 120, 50, 0.54), rgba(187, 78, 52, 0.36)); }
+.vacation-winter-tail { padding: 10px 0 0; }
+.vacation-year-line { position: absolute; left: 34px; right: 34px; top: 140px; height: 82px; }
+.vacation-year-track { position: absolute; left: 0; right: 0; top: 22px; height: 9px; border-radius: 9px; background: rgba(226, 239, 248, 0.24); border: 1px solid rgba(255, 255, 255, 0.28); box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.26); }
+.vacation-year-elapsed { height: 100%; border-radius: 9px; background: linear-gradient(90deg, #7dbde6, #75c796 42%, #ffd36b 80%, #f3a354); opacity: 0.85; }
+.vacation-year-today { position: absolute; top: 7px; transform: translateX(-50%); text-align: center; }
+.vacation-year-today > div { width: 3px; height: 39px; margin: auto; background: #fff; border-radius: 2px; box-shadow: 0 0 11px rgba(255, 255, 255, 0.90); }
+.vacation-year-today > span { display: block; margin-top: 2px; padding: 3px 8px; border-radius: 9px; color: #172230; background: #fff; font-size: 11px; font-weight: 900; letter-spacing: 0.08em; text-shadow: none; }
+.vacation-year-trip { position: absolute; height: 14px; min-width: 8px; border-radius: 7px; border: 2px solid rgba(255, 255, 255, 0.88); box-shadow: 0 0 12px currentColor; }
+.vacation-trip-past { color: #8acfa0; background: #64b981; opacity: 0.78; }
+.vacation-trip-next { color: #ffb45e; background: #ff9f43; animation: vacation-pulse 2s ease-in-out infinite; }
+.vacation-trip-future { color: #8bd8ff; background: #71c5ee; }
+@keyframes vacation-pulse { 50% { box-shadow: 0 0 19px currentColor; transform: scaleY(1.15); } }
+.vacation-months { position: absolute; left: 0; right: 0; top: 48px; display: grid; grid-template-columns: repeat(12, 1fr); }
+.vacation-months span { color: rgba(236, 245, 255, 0.72); font-size: 10px; font-weight: 800; text-align: center; }
+.vacation-legend { position: absolute; left: 24px; right: 24px; bottom: 15px; padding-top: 9px; border-top: 1px solid rgba(255, 255, 255, 0.18); display: flex; align-items: center; gap: 15px; color: rgba(236, 245, 255, 0.78); font-size: 12px; overflow: hidden; }
+.vacation-legend-item { display: flex; align-items: center; gap: 5px; min-width: 0; white-space: nowrap; }
+.vacation-legend-dot { width: 10px; height: 10px; flex: none; border-radius: 4px; }
+.vacation-legend-past { background: #64b981; }
+.vacation-legend-next { background: #ff9f43; box-shadow: 0 0 9px rgba(255, 159, 67, 0.85); }
+.vacation-legend-future { background: #71c5ee; }
+.vacation-legend-more, .vacation-legend-empty { white-space: nowrap; }
+.vacation-legend-note { margin-left: auto; color: rgba(236, 245, 255, 0.62); white-space: nowrap; }
+.vacation-count-value { position: absolute; inset: 0; z-index: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #fff0b0; font-weight: 820; }
+.vacation-count-value b { font-size: 37px; line-height: 0.9; }
+.vacation-count-value span { margin-top: 4px; font-size: 12px; letter-spacing: 0.09em; }
+.vacation-no-next { display: flex; height: 100%; flex-direction: column; align-items: center; justify-content: center; text-align: center; grid-row: 1 / -1; }
+.vacation-no-next-icon { width: 80px; height: 80px; margin-bottom: 14px; display: flex; align-items: center; justify-content: center; border: 2px solid rgba(255, 211, 107, 0.72); border-radius: 50%; color: #ffd36b; font-size: 48px; font-weight: 300; box-shadow: 0 0 24px rgba(255, 181, 58, 0.18); }
+
+.module-placeholder,
+.map-offline {
+  flex-direction: column;
+  gap: 10px;
+  color: #dfe3ee;
+  text-align: center;
+}
+
+.map-offline {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(circle at center, #15202a 0%, #070a0d 72%);
+}
+
+.map-navigation-label {
+  position: absolute; top: 12px; left: 16px; z-index: 4;
+  padding: 7px 12px; border-radius: 7px; background: #102032e8;
+  color: #fff; font-size: 17px; pointer-events: none;
+}
+.map-vehicle {
+  width: 30px; height: 36px; background: #ff8c3a;
+  clip-path: polygon(50% 0, 100% 100%, 50% 76%, 0 100%);
+}
+.map-vehicle-standing { width: 22px; height: 22px; clip-path: none; border-radius: 50%; border: 3px solid white; }
+.map-pane .maplibregl-ctrl-attrib { font: 12px/18px sans-serif; }
+.map-telemetry {
+  height: 100%;
+  padding: 16px 22px 20px;
+  display: grid;
+  grid-template-rows: minmax(0, 1.15fr) minmax(0, 0.85fr);
+  color: #eef6ff;
+  background:
+    radial-gradient(circle at 80% 15%, rgba(79, 180, 255, 0.16), transparent 38%),
+    linear-gradient(145deg, #101a22 0%, #070b0f 72%);
+  border-left: 2px solid rgba(79, 180, 255, 0.42);
+  box-shadow: inset 14px 0 28px rgba(0, 0, 0, 0.28);
+}
+
+.map-metric {
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.map-metric + .map-metric {
+  border-top: 1px solid rgba(255, 255, 255, 0.13);
+}
+
+.map-metric-label {
+  margin-bottom: 2px;
+  color: #9db0bf;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 1.7px;
+  text-transform: uppercase;
+}
+
+.map-metric-value-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 9px;
+  min-width: 0;
+}
+
+.map-metric-value {
+  color: #f5fbff;
+  font-weight: 250;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -5px;
+  line-height: 0.92;
+  text-shadow: 0 0 26px rgba(79, 180, 255, 0.32);
+}
+
+.map-metric-speed .map-metric-value {
+  font-size: 96px;
+}
+
+.map-metric-altitude .map-metric-value {
+  font-size: 58px;
+  letter-spacing: -3px;
+}
+
+.map-metric-unit {
+  color: #6fc8ff;
+  font-size: 18px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+}
+
+.map-altitude-reference {
+  min-height: 14px;
+  margin-top: 1px;
+  color: #6f8798;
+  font-size: 12px;
+  letter-spacing: 1.6px;
+  text-transform: uppercase;
+}
+
+.module-placeholder-icon,
+.map-offline-icon {
+  font-size: 64px;
+  color: #46e0c0;
+  filter: drop-shadow(0 0 16px rgba(70, 224, 192, 0.45));
+}
+
+.module-placeholder-title,
+.map-offline-title {
+  font-size: 28px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.module-placeholder-copy,
+.map-offline-copy {
+  font-size: 15px;
+  color: #9aa0a6;
+  letter-spacing: 1px;
+}
+
+.weather-place { display:block; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-size:15px; letter-spacing:.5px; }
+.weather-place-source { color:#b9cbd5; font-size:9px; letter-spacing:0; text-transform:none; }

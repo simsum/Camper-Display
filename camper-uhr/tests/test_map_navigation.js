@@ -1,0 +1,36 @@
+const assert = require('node:assert/strict');
+const {createMapNavigation} = require('../frontend/js/screens/map.js');
+const settings = {map_zoom_near: 16, map_zoom_far: 11, map_zoom_speed_threshold_kmh: 80};
+const status = {gps: {connected: true, latitude: 49.89, longitude: 10.89, speed_kmh: 30, heading_deg: 90, simulation_active: false}, operating: {mode: 'drive'}};
+const nav = createMapNavigation();
+assert.equal(nav(status, settings).bearing, 90);
+assert.equal(nav(status, settings).pitch, 45);
+assert.deepEqual(nav(status, settings).center, [10.89, 49.89]);
+status.gps.speed_kmh = 0;
+status.gps.heading_deg = 180;
+assert.equal(nav(status, settings).bearing, 90, 'short traffic stop keeps course');
+status.operating.mode = 'stand';
+assert.equal(nav(status, settings).bearing, 0);
+assert.equal(nav(status, settings).pitch, 0);
+status.operating.mode = 'drive';
+assert.equal(nav(status, settings).hasHeading, false, 'no old heading after stand');
+status.gps.speed_kmh = 30;
+for (const heading of [0, 90, 180, 270, 359, 1]) {
+  status.gps.heading_deg = heading;
+  assert.equal(nav(status, settings).bearing, heading);
+}
+status.gps.heading_deg = null;
+assert.equal(nav(status, settings).hasHeading, false, 'missing moving course must not be invented');
+status.gps.heading_deg = 90;
+nav(status, settings);
+status.gps.connected = false;
+assert.equal(nav(status, settings), null);
+status.gps.connected = true;
+status.gps.speed_kmh = 0;
+assert.equal(nav(status, settings).hasHeading, false);
+status.gps.speed_kmh = 30;
+nav(status, settings);
+status.gps.simulation_active = true;
+status.gps.speed_kmh = 0;
+assert.equal(nav(status, settings).hasHeading, false, 'simulation cannot inherit real course');
+console.log('map navigation: course, traffic stop, stand/north, missing fix/course, simulation separation OK');

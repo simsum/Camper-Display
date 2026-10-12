@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Camper-Display · Unsere Fahrt</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <link rel="stylesheet" href="/css/journey-preview.css">
+</head>
+<body>
+  <header><div><span class="eyebrow">CAMPER UHR · VORSCHAU MIT TRACCAR</span><h1>Unsere Fahrt</h1></div><a href="/">Verbindung einrichten</a></header>
+  <nav aria-label="Zeitraum"><button data-mode="today" aria-pressed="false">Heute</button><button data-mode="last" aria-pressed="true">Letzter Fahrtag · 24 h</button><button data-mode="vacation" aria-pressed="false">Urlaub</button><button id="refresh">Im Hintergrund aktualisieren</button></nav>
+  <div id="vacation-controls" hidden>
+    <label>Gespeicherter Urlaub <select id="vacation"><option value="">Zeitraum selbst wählen</option></select></label>
+    <label>Von <input id="from" type="date"></label><label>Bis einschließlich <input id="to" type="date"></label><button id="load-period">Zeitraum laden</button>
+  </div>
+  <p id="status" role="status" aria-live="polite">Vorbereiteten Datenstand abrufen …</p>
+  <div id="display-frame"><section id="display" aria-label="Vorschau 1480 mal 320 Pixel">
+    <div class="journey-map-pane">
+      <div id="journey-map" aria-label="Karte der gefahrenen Strecke"></div>
+      <div class="journey-heading"><span id="journey-date">Daten werden vorbereitet</span></div>
+      <div id="map-message">Strecke wird geladen …</div>
+      <div class="route-caption"><span><i class="start-dot"></i>Start</span><span><i class="end-dot"></i>Ziel</span><span><i class="stop-dot"></i>Stopp</span><span id="trip-count"></span></div>
+    </div>
+    <aside class="journey-data">
+      <div class="distance"><span class="eyebrow">GEFAHRENE STRECKE</span><div><strong id="distance">–</strong><span>km</span></div></div>
+      <div class="stats-grid"><div><span>FAHRZEIT</span><strong id="drive">–</strong></div><div><span>PAUSENZEIT</span><strong id="pause">–</strong></div><div><span>STOPPS</span><strong id="stops">–</strong></div></div>
+      <div class="journey-footer"><span id="journey-source">TRACCAR</span><span id="device-name">CAMPERDISPLAY</span></div>
+    </aside>
+  </section></div>
+  <p class="note">Displayformat 1480 × 320 · 70 % Karte / 30 % Fahrdaten · Traccar-GPS-Daten werden unabhängig von der Anzeige alle 5 Minuten im Hintergrund vorbereitet. Höchstens 1200 Kartenpunkte, Kennzahlen vor der Vereinfachung berechnet. Keine SD-Karten-Schreibvorgänge für Fahrdaten.</p>
+  <p class="note">Letzter Fahrtag: 24 Stunden rückblickend ab der letzten erkannten Ankunft, auch wenn sie einige Tage zurückliegt (Suche bis 30 Tage). Enthält Hinweg, Aufenthalte und Rückweg. Pausen ab 3 Minuten unter 3 km/h am selben Ort; Parken vor der ersten Abfahrt und nach der letzten Ankunft zählt nicht. Große unbelegte GPS-Lücken zählen nicht als Fahrt. Bei Ausfall wird kein alter Datenstand als frisch ausgegeben.</p>
+  <p class="note">Kartenkacheln kommen von OpenStreetMap; der Anbieter sieht den betrachteten Kartenausschnitt. Kartenhintergrund wird nicht vorab heruntergeladen.</p>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="/js/journey-preview.js"></script>
+</body>
+</html>

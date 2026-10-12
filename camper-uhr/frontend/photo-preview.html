@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Reisemomente · Adaptive Vorschau</title>
+  <link rel="stylesheet" href="css/layout.css?v=0.6.6-nodots1">
+  <link rel="stylesheet" href="css/photo-frame.css?v=0.8.0-adaptive3">
+  <style>
+    body{background:#081019;cursor:pointer}
+    #stage{width:1480px;height:320px}
+    .preview-note{position:fixed;right:12px;bottom:8px;z-index:20;padding:4px 8px;border-radius:5px;background:rgba(0,0,0,.46);color:rgba(255,255,255,.62);font:11px/1.2 "Segoe UI",sans-serif;pointer-events:none}
+  </style>
+</head>
+<body>
+  <div id="stage"><div id="screens"></div></div>
+  <div class="preview-note">Antippen: nächste Zusammenstellung</div>
+  <script src="js/screens/photo-frame.js?v=0.8.0-adaptive3"></script>
+  <script>
+    const screen = createPhotoFrameScreen({ initialPhotos: [
+      { id:"demo-1", url:"assets/photo-demo/panorama.jpg", aspect_ratio:4.2, taken_at:1789725600, place:"Südtirol · Italien" },
+      { id:"demo-2", url:"assets/photo-demo/landscape-wide.jpg", aspect_ratio:1.78, taken_at:1789639200, place:"Bamberg · Deutschland" },
+      { id:"demo-3", url:"assets/photo-demo/landscape.jpg", aspect_ratio:1.5, taken_at:1789552800, place:"Gardasee · Italien" },
+      { id:"demo-4", url:"assets/photo-demo/portrait-a.jpg", aspect_ratio:.67, taken_at:1789466400, place:"Rhön · Deutschland" },
+      { id:"demo-5", url:"assets/photo-demo/portrait-b.jpg", aspect_ratio:.75, taken_at:1789380000, place:"Meran · Italien" },
+      { id:"demo-6", url:"assets/photo-demo/portrait-b.jpg", aspect_ratio:.75, taken_at:1789293600, place:"Chiemsee · Deutschland" },
+      { id:"demo-7", url:"assets/photo-demo/portrait-c.jpg", aspect_ratio:.8, taken_at:1789207200, place:"Tirol · Österreich" },
+      { id:"demo-8", url:"assets/photo-demo/portrait-a.jpg", aspect_ratio:.67, taken_at:1789120800, place:"Verona · Italien" },
+      { id:"demo-9", url:"assets/photo-demo/landscape.jpg", aspect_ratio:1.5, taken_at:1789034400, place:"Allgäu · Deutschland" }
+    ], fetcher:null, intervalMs:5000 });
+    document.getElementById("screens").appendChild(screen.element);
+    screen.element.classList.add("screen-active");
+    screen.onMount();
+    screen.element.addEventListener("click", () => screen.nextPage());
+    function fitPreview() {
+      const scale = Math.min(innerWidth / 1480, innerHeight / 320);
+      document.getElementById("stage").style.transform = `scale(${scale})`;
+    }
+    addEventListener("resize", fitPreview);
+    fitPreview();
+  </script>
+</body>
+</html>

@@ -1,0 +1,88 @@
+.nixie-row {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+/* Photo-based themes: real nixie tube sprites, sized as large as the
+   1480x320 bar display allows for maximum readability. */
+.nixie-img-row {
+  align-items: flex-end;
+}
+
+.nixie-img-tube {
+  display: inline-flex;
+  align-items: flex-end;
+  margin: 0 2px;
+  height: 280px;
+}
+
+.nixie-img-digit {
+  height: 100%;
+  width: auto;
+  object-fit: contain;
+}
+
+/* Nixie images share a permanent housing; only their registered interior changes. */
+.nixie-aligned-tube {
+  isolation: isolate;
+  position: relative;
+  display: inline-block;
+  flex: 0 0 var(--nixie-slot-width);
+  width: var(--nixie-slot-width);
+  height: 280px;
+  margin: 0 2px;
+}
+
+.nixie-aligned-housing {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  filter: drop-shadow(0 3px 3px rgba(0, 0, 0, .5));
+}
+
+.nixie-aligned-window {
+  position: absolute;
+  overflow: hidden;
+}
+
+.nixie-aligned-numeral {
+  position: absolute;
+  max-width: none;
+  object-fit: fill;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+/* Stationary contact light grounds the glass on the chosen background.
+   Gradients are static: no blur animation or per-tick compositing changes. */
+.nixie-aligned-tube::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 2%;
+  height: 11%;
+  background: radial-gradient(ellipse, rgba(0,0,0,.72), transparent 68%);
+  pointer-events: none;
+  z-index: -1;
+}
+
+.nixie-aligned-blue::before {
+  left: -5%;
+  right: 14%;
+  background: radial-gradient(ellipse, rgba(67,106,255,.36), rgba(28,54,180,.12) 40%, transparent 72%);
+}
+
+.nixie-aligned-blank::before {
+  bottom: 5%;
+  background: radial-gradient(ellipse, rgba(215,116,41,.18), rgba(0,0,0,.6) 42%, transparent 73%);
+}
+
+/* Clip only the fixed housing's stray matte pixels, not the numeral window.
+   This contour follows the blue source image's glass and base silhouette. */
+.nixie-aligned-blue .nixie-aligned-housing {
+  clip-path: polygon(44% 2%, 53% 3%, 64% 6%, 75% 11%, 80% 16%, 82% 23%, 82% 85%, 84% 91%, 78% 95%, 63% 97%, 27% 97%, 11% 95%, 4% 92%, 6% 86%, 6% 23%, 8% 16%, 14% 11%, 26% 6%, 37% 3%);
+}

@@ -1,0 +1,46 @@
+# Only the maintained project and its documentation belong in Git.
+/*
+!/.gitignore
+!/.gitattributes
+!/README.md
+!/AGENTS.md
+!/START_HIER.md
+!/UEBERGABE.md
+!/LICENSE
+!/THIRD_PARTY_NOTICES.md
+!/SECURITY.md
+!/camper-uhr/
+/camper-uhr/*
+!/camper-uhr/.gitignore
+!/camper-uhr/README.md
+!/camper-uhr/ARCHITECTURE.md
+!/camper-uhr/requirements*.txt
+!/camper-uhr/backend/
+!/camper-uhr/frontend/
+!/camper-uhr/deploy/
+!/camper-uhr/docs/
+!/camper-uhr/scripts/
+!/camper-uhr/tests/
+!/camper-uhr/previews/
+
+# Runtime data, secrets and generated files must never be committed.
+**/data/
+**/.local/
+**/.venv/
+**/venv/
+**/__pycache__/
+**/.pytest_cache/
+**/node_modules/
+**/local-private/
+*.py[cod]
+*.db*
+*.sqlite*
+*.log
+*.pem
+*.key
+.env
+.env.*
+*.zip
+*.tar.gz
+# Local publication preparation; never add this archive to Git.
+/publication-backup/

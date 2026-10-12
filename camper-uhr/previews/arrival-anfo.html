@@ -1,0 +1,35 @@
+<!doctype html><html lang="de"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Camper Uhr · Ankunft in Anfo</title>
+<link rel="stylesheet" href="../frontend/css/arrival.css?v=0.6.0-arrival1">
+<style>
+*{box-sizing:border-box}body{margin:0;padding:24px;background:#111720;color:#e4eaf2;font:16px 'Segoe UI',sans-serif}h1{font-size:23px}p{color:#b7c4d6}.frame{width:100%;overflow:hidden;background:#000}.stage{position:relative;width:1480px;height:320px;transform-origin:top left}.screen{position:absolute;inset:0;display:none}.screen-active{display:flex}.controls{display:flex;gap:18px;flex-wrap:wrap;align-items:center;margin:20px 0}button,input{font:inherit}button{padding:8px 12px;background:#27374b;color:#eee;border:1px solid #5c708c;border-radius:5px}#result{color:#c6ddb7}.arrival-screen h1,.arrival-screen p{margin-top:0}a{color:#9accff}
+</style>
+<h1>Ankunft in Anfo · echter Datenabruf</h1>
+<p>Mit dem späteren Pi-Code am Rechner abgerufen. GPS-Zuordnung, Wikipedia-Text, Kenndaten, Sonnenuntergang und verkleinertes Foto. Kein Test direkt auf dem Pi.</p>
+<div class="frame"><div class="stage" id="arrival-stage"></div></div>
+<div class="controls"><label><input id="photo" type="checkbox" checked> Foto anzeigen</label><button id="test" type="button">Anzeige prüfen</button><span id="result" role="status"></span></div>
+<p>Beispieldaten vom 11.09.2026. „Angekommen nach“ und „Anzeigen für“ sind in den Einstellungen separat einstellbar; hier bleibt das Beispiel zur Betrachtung stehen.</p>
+<a href="clock-modules.html">Zurück zu den Uhrmodulen</a>
+<script src="anfo-fixture.js"></script><script src="../frontend/js/screens/arrival.js?v=0.6.0-arrival1"></script>
+<script>
+const stage=document.getElementById('arrival-stage'),screen=createArrivalScreen(ANFO_FIXTURE);
+screen.element.classList.add('screen-active');stage.appendChild(screen.element);
+const photo=screen.element.querySelector('.arrival-photo');photo.src='anfo-photo.jpg';photo.style.display='block';
+function fit(){const scale=stage.parentElement.clientWidth/1480;stage.style.transform=`scale(${scale})`;stage.parentElement.style.height=`${320*scale}px`;}
+fit();window.addEventListener('resize',fit);
+document.getElementById('photo').onchange=e=>{photo.style.display=e.target.checked?'block':'none';};
+document.getElementById('test').onclick=async()=>{
+ const result=document.getElementById('result');
+ try{
+  await photo.decode();if(photo.naturalWidth>1280)throw Error('Foto zu groß');
+  if(!screen.element.textContent.includes('Anfo')||!screen.element.textContent.includes('439'))throw Error('Anfo-Daten fehlen');
+  if(!screen.element.textContent.includes('Superbass'))throw Error('Bildquelle fehlt');
+  const box=screen.element.getBoundingClientRect();
+  for(const el of screen.element.querySelectorAll('h1,.arrival-travel,.arrival-facts,.arrival-credits')){
+    const rect=el.getBoundingClientRect();if(rect.bottom>box.bottom+1||rect.right>box.right+1)throw Error('Text läuft aus dem Display');
+  }
+  const old=photo.style.display;photo.style.display='none';if(!screen.element.textContent.includes('Anfo'))throw Error('Fallback fehlt');photo.style.display=old;
+  result.textContent='Anfo, Foto, Quellenzeile, Layout und Anzeige ohne Foto geprüft.';
+ }catch(error){result.textContent='Fehler: '+error.message;}
+};
+</script></html>

@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="de">
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Nixie – ruhiger Ziffernwechsel</title>
+<link rel="stylesheet" href="../frontend/css/nixie.css?v=0.5.1b">
+<style>
+*{box-sizing:border-box}body{margin:18px;background:#10151d;color:#eee;font:16px system-ui}h1{font-size:23px;margin:0 0 7px}p{color:#bdc8d8;margin:6px 0}select,button{font:inherit;margin:5px;padding:7px;background:#243247;color:#fff;border:1px solid #52627c;border-radius:6px}h2{font-size:15px;margin:10px 0 4px}.frame{overflow:hidden;background:#000;border:1px solid #3b4757;border-radius:8px}.canvas{width:1480px;height:320px;display:flex;align-items:center;justify-content:center;transform-origin:top left}#originals{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}.sample{background:#000;text-align:center;border:1px solid #455}.sample .nixie-row{padding:10px 0}.sample b{display:block;padding:5px}summary{cursor:pointer;margin:15px 0}.hint{font-size:13px}
+</style>
+<h1>Nixie-Röhren: ruhiger Ziffernwechsel</h1>
+<p>Nur noch Flip, Blau und Schlicht. Unten: ruhige Ziffern und besser eingebundene Außenränder.</p>
+<label>Design <select id="theme"></select></label>
+<label>Hintergrund <input id="background" type="color" value="#000000" aria-label="Hintergrundfarbe"></label>
+<button id="play">Pause</button><button id="next">Ziffer weiter</button><span id="digit-label"></span>
+<button id="check">Alle Ziffern prüfen</button><span id="check-result" role="status"></span>
+<h2>Bisher – das gesamte Röhrenbild wechselt</h2><div class="frame"><div id="before" class="canvas"></div></div>
+<h2>Neu – festes Gehäuse mit ruhiger Außenkontur und dezentem Standlicht</h2><div class="frame"><div id="after" class="canvas"></div></div>
+<p class="hint">Vorschau im Displayformat 1480 × 320. Die Klappzahlen-Uhr verwendet weiterhin ihre bisherige Darstellung.</p>
+<details><summary>Alle ausgerichteten Ziffern vergleichen</summary><div id="originals"></div></details>
+<script src="../frontend/js/themes.js?v=0.5.1b"></script>
+<script src="../frontend/js/screens/clock.js?v=0.5.1b"></script>
+<script>
+let digit=0,playing=true,renderer,oldDigits=[],oldColons=[];
+const select=document.querySelector('#theme');
+document.querySelector('#background').oninput=event=>document.querySelectorAll('.frame,.sample').forEach(el=>el.style.background=event.target.value);
+for(const theme of NIXIE_THEMES.filter(t=>t.kind==='image')){const o=document.createElement('option');o.value=theme.id;o.textContent=theme.label;select.appendChild(o)}
+function fit(){document.querySelectorAll('.canvas').forEach(c=>{const scale=c.parentElement.clientWidth/1480;c.style.transform=`scale(${scale})`;c.parentElement.style.height=`${320*scale}px`})}
+function update(){const t={...getTheme(select.value),path:`../frontend/${getTheme(select.value).path}`};oldDigits.forEach(i=>i.src=themeDigitSrc(t,digit));oldColons.forEach(i=>i.src=themeColonSrc(t,digit%2===0));renderer.digitEls.forEach(i=>renderer.setDigit(i,String(digit)));renderer.setColonOn(digit%2===0);document.querySelector('#digit-label').textContent=`Ziffer ${digit}`}
+function draw(){const t={...getTheme(select.value),path:`../frontend/${getTheme(select.value).path}`};const before=document.querySelector('#before');before.replaceChildren();const row=document.createElement('div');row.className='nixie-row nixie-img-row';oldDigits=[];oldColons=[];for(let i=0;i<8;i++){const tube=document.createElement('span');tube.className='nixie-img-tube';const img=document.createElement('img');img.className='nixie-img-digit';tube.appendChild(img);row.appendChild(tube);(i===2||i===5?oldColons:oldDigits).push(img)}before.appendChild(row);renderer=renderClockTubesImage(document.querySelector('#after'),6,t);const gallery=document.querySelector('#originals');gallery.replaceChildren();for(let i=0;i<10;i++){const sample=document.createElement('div');sample.className='sample';const label=document.createElement('b');label.textContent=i;const container=document.createElement('div');sample.append(label,container);gallery.appendChild(sample);const r=renderClockTubesImage(container,1,t);r.setDigit(r.digitEls[0],String(i))}update();fit()}
+select.value='blue';select.addEventListener('change',()=>{draw();document.querySelector('#background').dispatchEvent(new Event('input'))});document.querySelector('#next').onclick=()=>{digit=(digit+1)%10;update()};document.querySelector('#play').onclick=()=>{playing=!playing;document.querySelector('#play').textContent=playing?'Pause':'Abspielen'};window.addEventListener('resize',fit);setInterval(()=>{if(playing){digit=(digit+1)%10;update()}},1200);draw();
+document.querySelector('#check').onclick=async()=>{
+const result=document.querySelector('#check-result');const saved=select.value;playing=false;document.querySelector('#play').textContent='Abspielen';document.querySelector('#check').disabled=true;select.disabled=true;document.querySelector('#next').disabled=true;
+try{let count=0;for(const theme of NIXIE_THEMES.filter(t=>NIXIE_ALIGNMENT[t.id])){select.value=theme.id;digit=0;draw();const panel=document.querySelector('#after');await Promise.all(Array.from(panel.querySelectorAll('img'),image=>image.decode()));const footprint=()=>JSON.stringify(Array.from(panel.querySelectorAll('.nixie-aligned-housing,.nixie-aligned-window'),e=>{const r=e.getBoundingClientRect();return [r.x,r.y,r.width,r.height,e.getAttribute('src')]}));const baseline=footprint();for(digit=0;digit<10;digit++){update();await new Promise(requestAnimationFrame);if(footprint()!==baseline)throw new Error(theme.label+' bewegt sich');if(panel.querySelectorAll('.nixie-aligned-numeral[style*="visibility: visible"]').length!==8)throw new Error('Fehlende Ziffer');count++}}result.textContent=`${count} Wechsel geprüft: Gehäuse und Anzeigefelder stehen fest.`}catch(error){result.textContent='Prüfung fehlgeschlagen: '+error.message}finally{select.value=saved;digit=0;draw();document.querySelector('#check').disabled=false;select.disabled=false;document.querySelector('#next').disabled=false}
+};
+</script></html>

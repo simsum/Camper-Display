@@ -1,0 +1,15 @@
+.arrival-screen{background:#111a20;isolation:isolate;z-index:850;color:#fff4e2;overflow:hidden;}
+.arrival-screen .arrival-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 55%;z-index:-3;}
+.arrival-screen .arrival-shade{position:absolute;inset:0;background:linear-gradient(90deg,#10191ff5 0%,#10191fc9 27%,#10191f20 43%,#10191f30 52%,#10191fec 66%,#10191ff7 100%);z-index:-2;}
+.arrival-screen .arrival-copy{position:absolute;inset:0 0 42px;padding:26px 36px;display:grid;grid-template-columns:35% 27% 38%;align-items:center;}
+.arrival-screen .arrival-eyebrow{font-size:22px;letter-spacing:.16em;color:#edc98a;}
+.arrival-screen h1{font-weight:500;line-height:1.04;letter-spacing:-.025em;margin:3px 0 9px;overflow-wrap:anywhere;}
+.arrival-screen .arrival-region{font-size:24px;color:#e5e0d7;}
+.arrival-screen .arrival-travel,.arrival-screen .arrival-facts{display:flex;gap:32px;margin-top:15px;}
+.arrival-screen strong{display:block;color:#f0cc8c;font-size:34px;line-height:1.2;font-weight:500;}
+.arrival-screen span{display:block;color:#cec8bb;font-size:19px;}
+.arrival-screen .arrival-story{grid-column:3;min-width:0;}
+.arrival-screen .arrival-story p{font-size:24px;line-height:1.35;display:-webkit-box;-webkit-line-clamp:5;-webkit-box-orient:vertical;overflow:hidden;}
+.arrival-screen .arrival-facts strong{font-size:29px;}
+.arrival-screen .arrival-credits{position:absolute;bottom:7px;left:36px;right:36px;display:flex;justify-content:flex-end;gap:6px 16px;flex-wrap:wrap;font-size:13px;line-height:1.2;}
+.arrival-screen .arrival-credits a,.arrival-screen .arrival-credits span{color:#b8b4ad;font-size:13px;text-decoration:none;}

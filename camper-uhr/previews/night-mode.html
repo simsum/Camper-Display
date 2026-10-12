@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="de">
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Camper Uhr · Nachtmodus</title>
+<style>
+body{margin:0;padding:24px;background:#111720;color:#e4eaf2;font:16px 'Segoe UI',sans-serif}h1{font-size:23px}p{color:#b7c4d6}.controls{display:flex;gap:18px;flex-wrap:wrap;align-items:center;margin:20px 0}button,input,select{font:inherit}button{padding:8px 12px;background:#27374b;color:#eee;border:1px solid #5c708c;border-radius:5px}.frame{width:100%;overflow:hidden;background:#000}.stage{position:relative;width:1480px;height:320px;transform-origin:top left}.screen{position:absolute;inset:0;display:none}.screen-active{display:flex}#result{color:#c6ddb7}a{color:#9accff}
+</style>
+<h1>Nachtuhr · maximale Zifferngröße</h1>
+<p>Schwarz, vier große Ziffern, keine Sekunden und keine Animation. Tatsächlicher Modulcode im Format 1480 × 320.</p>
+<div class="frame"><div class="stage" id="night-stage"></div></div>
+<div class="controls">
+<label>Uhrzeit <input id="time" type="time" value="23:48"></label>
+<label>Farbe <select id="color"><option value="amber">Bernstein</option><option value="red">Rot</option><option value="white">Warmweiß</option></select></label>
+<label><input id="dim" type="checkbox"> Bildabdunklung auf 5 % simulieren</label>
+<button id="test" type="button">Nachtuhr prüfen</button><span id="result" role="status"></span>
+</div>
+<p>Die Simulation regelt nicht die Hintergrundbeleuchtung deines Rechners. Die echte Hardware-Helligkeit wird später am Pi geprüft.</p>
+<a href="clock-modules.html">Zurück zu den sieben Uhrmodulen</a>
+<script src="../frontend/js/screens/clock-designs.js?v=0.6.0d"></script>
+<script src="../frontend/js/screens/clock-night.js?v=0.6.0-night1"></script>
+<script>
+const settings={time_format_24h:true,night_color:'amber',display_width:1480,display_height:320};
+const screen=createNightClockScreen(settings),stage=document.getElementById('night-stage');
+screen.element.classList.add('screen-active');stage.appendChild(screen.element);
+function fit(){const scale=stage.parentElement.clientWidth/1480;stage.style.transform=`scale(${scale})`;stage.parentElement.style.height=`${320*scale}px`;}
+function update(){const [h,m]=document.getElementById('time').value.split(':').map(Number);if(!Number.isFinite(h+m))return;settings.night_color=document.getElementById('color').value;screen.onTick(null,settings,new Date(2026,8,11,h,m));screen.element.style.opacity=document.getElementById('dim').checked?'.05':'1';}
+document.getElementById('time').oninput=update;document.getElementById('color').onchange=update;document.getElementById('dim').onchange=update;window.addEventListener('resize',fit);fit();update();
+document.getElementById('test').onclick=()=>{
+ const result=document.getElementById('result');
+ try{
+  const canvas=screen.element.querySelector('canvas'),ctx=canvas.getContext('2d');
+  let count=0;
+  for(const format of [true,false])for(const [h,m] of [[0,0],[1,11],[12,0],[20,58],[23,59]]){
+   const config={...settings,time_format_24h:format};const now=new Date(2026,8,11,h,m),p=clockDisplayParts(now,config);
+   screen.onTick(null,config,now);
+   if(canvas.dataset.time!==p.hh+p.mm)throw Error('Falsche Uhrzeit');
+   // Check the actual raster, including font-specific ascenders/descenders.
+   const pixels=ctx.getImageData(0,0,1480,320).data;let minY=320,maxY=-1,minX=1480,maxX=-1;
+   for(let y=0;y<320;y++)for(let x=0;x<1480;x++){const i=(y*1480+x)*4;if(pixels[i]+pixels[i+1]+pixels[i+2]>12){minY=Math.min(minY,y);maxY=Math.max(maxY,y);minX=Math.min(minX,x);maxX=Math.max(maxX,x);}}
+   if(minY<5||maxY>314||minX<5||maxX>1474)throw Error('Ziffern am Rand abgeschnitten');
+   if(maxY-minY<280)throw Error('Ziffern nutzen Displayhöhe nicht aus');
+   count++;
+  }
+  result.textContent=`${count} Zeit-/Formatfälle bestanden · maximale Höhe ohne Abschneiden.`;
+ }catch(error){result.textContent='Fehler: '+error.message}finally{update();}
+};
+</script>
+</html>

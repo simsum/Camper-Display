@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="de">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Camper-Display · Navi-Vorschau</title>
+<link rel="stylesheet" href="css/layout.css?v=0.4.3">
+<link rel="stylesheet" href="css/modern.css?v=0.6.6-nav1">
+<style>
+body {display:block; height:auto; min-height:100vh; background:#0c141d; color:#edf5ff; overflow:auto; font-family:system-ui; padding:24px; margin:0}
+h1 {font-size:24px} p {color:#b8c9d8}
+.preview-controls {display:flex; flex-wrap:wrap; gap:10px; margin:20px 0}
+button {padding:10px 16px; background:#21384b; color:white; border:1px solid #62869f; border-radius:8px; cursor:pointer}
+button[aria-pressed="true"] {background:#e9ab59; color:#162431}
+#preview-frame {position:relative; width:100%; aspect-ratio:1480/320; overflow:hidden; border-radius:12px}
+#preview-stage {position:absolute; width:1480px; height:320px; transform-origin:top left}
+#preview-stage .screen {display:block; opacity:1; visibility:visible}
+</style>
+<h1>Navi-Ansicht · lokale Vorschau</h1>
+<p>Simulierter Standort Bamberg. Fahrt: 45° Perspektive und Fahrtrichtung oben. Stand: flach und Norden oben.</p>
+<div class="preview-controls">
+<button data-mode="stand">Stand · Norden</button>
+<button data-heading="0">Fahrt · Nord</button>
+<button data-heading="90">Fahrt · Ost</button>
+<button data-heading="180">Fahrt · Süd</button>
+<button data-heading="270">Fahrt · West</button>
+<button data-stop="true">Kurzer Halt</button>
+<button data-loss="true">GPS-Ausfall</button>
+</div>
+<div id="preview-frame"><div id="preview-stage"></div></div>
+<p id="preview-state"></p>
+<script src="js/vendor-loader.js?v=0.6.6-nav1"></script>
+<script src="js/screens/map.js?v=0.6.6-nav2"></script>
+<script>
+const settings = {map_zoom_near:17, map_zoom_far:16, map_zoom_speed_threshold_kmh:80, map_trail_enabled:false};
+const status = {gps:{connected:true,latitude:49.891,longitude:10.891,speed_kmh:30,altitude_m:240,altitude_reference:'msl',heading_deg:90,simulation_active:true},operating:{mode:'drive'}};
+const screen = createMapScreen();
+document.querySelector('#preview-stage').appendChild(screen.element);
+function scale() { document.querySelector('#preview-stage').style.transform = `scale(${document.querySelector('#preview-frame').clientWidth / 1480})`; }
+scale(); window.addEventListener('resize', scale);
+screen.onMount();
+function tick() {
+  screen.onTick(status,settings);
+  document.querySelector('#preview-state').textContent = !status.gps.connected ? 'Kein GPS-Signal' : `${status.operating.mode === 'drive' ? 'Fahrt' : 'Stand'} · ${status.gps.speed_kmh} km/h · GPS-Kurs ${status.gps.heading_deg ?? '–'}°`;
+}
+document.querySelectorAll('button').forEach(button => button.addEventListener('click', () => {
+  document.querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed',String(b === button)));
+  status.gps.connected = !button.dataset.loss;
+  if (button.dataset.mode) { status.operating.mode='stand'; status.gps.speed_kmh=0; status.gps.heading_deg=null; }
+  if (button.dataset.heading !== undefined) { status.operating.mode='drive'; status.gps.speed_kmh=30; status.gps.heading_deg=Number(button.dataset.heading); }
+  if (button.dataset.stop) { status.gps.speed_kmh=0; status.gps.heading_deg=null; }
+  tick();
+}));
+document.querySelector('[data-heading="90"]').setAttribute('aria-pressed','true');
+tick();
+window.addEventListener('pagehide', () => screen.onUnmount());
+</script>
+</html>

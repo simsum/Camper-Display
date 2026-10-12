@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+  <title>Camper-Display</title>
+  <link rel="stylesheet" href="css/layout.css?v=0.6.6-nodots1" />
+  <link rel="stylesheet" href="css/nixie.css?v=0.5.1b" />
+  <link rel="stylesheet" href="css/clock-designs.css?v=0.6.6-led2" />
+  <link rel="stylesheet" href="css/modern.css?v=0.6.6-place1" />
+  <link rel="stylesheet" href="css/photo-frame.css?v=0.8.0-adaptive3" />
+  <link rel="stylesheet" href="css/photo-qr.css?v=0.7.0-qr1" />
+</head>
+<body>
+  <div id="stage">
+    <div id="screens"></div>
+    <div id="photo-qr-screen" class="screen photo-qr-screen" aria-hidden="true">
+      <div class="photo-qr-copy">
+        <span>REISEMOMENTE</span>
+        <strong>Fotos hochladen</strong>
+        <p>Mit dem Camper-WLAN verbinden<br>und QR-Code scannen</p>
+        <small id="photo-upload-address">Fotoseite im Camper-Netz öffnen</small>
+      </div>
+      <div class="photo-qr-code" hidden><img id="photo-upload-qr" alt="QR-Code zur Fotoseite"></div>
+    </div>
+    <button id="photo-qr-trigger" type="button" aria-label="QR-Code für den Foto-Upload anzeigen"></button>
+    <div id="display-dimmer" aria-hidden="true"></div>
+  </div>
+
+  <script src="js/vendor-loader.js?v=0.6.6-nav1"></script>
+  <script src="js/themes.js?v=0.5.1b"></script>
+  <script src="js/screens/clock.js?v=0.6.0"></script>
+  <script src="js/screens/clock-designs.js?v=0.6.6-led2"></script>
+  <script src="js/screens/clock-marble.js?v=0.6.0"></script>
+  <script src="js/screens/photo-frame.js?v=0.8.0-adaptive3"></script>
+  <script src="js/screens/clock-night.js?v=0.6.0-night1"></script>
+  <script src="js/screens/map.js?v=0.6.6-nav2"></script>
+  <script src="js/screens/weather.js?v=0.6.6-place1"></script>
+  <script src="js/screens/sun.js?v=0.3.2"></script>
+  <script src="js/screens/calendar.js?v=0.5.0"></script>
+  <link rel="stylesheet" href="css/arrival.css?v=0.6.0-arrival1" />
+  <script src="js/screens/arrival.js?v=0.6.0-arrival1"></script>
+  <script src="js/screens/journey.js?v=0.6.1"></script>
+  <script src="js/app.js?v=0.7.0-qr1"></script>
+</body>
+</html>

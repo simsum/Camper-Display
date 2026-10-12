@@ -1,0 +1,10 @@
+<!doctype html><html lang="de"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Camper-Display · Wettervorschau</title>
+<link rel="stylesheet" href="css/layout.css"><link rel="stylesheet" href="css/modern.css?v=0.6.6-place1">
+<style>body{display:block;height:auto;min-height:100vh;overflow:auto;padding:24px;background:#0c141d;color:#edf5ff;font-family:system-ui}h1{font-size:24px}p{color:#b8c9d8}#frame{position:relative;width:100%;aspect-ratio:1480/320;overflow:hidden;border-radius:12px}#weather-stage{position:absolute;width:1480px;height:320px;transform-origin:top left;--panel-opacity:.52;--panel-blur:0px}#weather-stage .screen{display:block;opacity:1;visibility:visible}</style>
+<h1>Wettermodul</h1><p>Gestaltungsvorschau mit Beispieldaten – keine aktuelle Wettervorhersage.</p><div id="frame"><div id="weather-stage"></div></div>
+<script src="js/screens/weather.js?v=0.6.6-place1"></script><script>
+const screen=createWeatherScreen();document.querySelector('#weather-stage').appendChild(screen.element);
+const dates=Array.from({length:4},(_,i)=>{const d=new Date();d.setDate(d.getDate()+i);return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`});
+screen.onMount();screen.onTick({weather:{available:true,location_name:"Bamberg · Deutschland",latitude:49.891,longitude:10.891,unit_celsius:true,temperature:23,apparent_temperature:24,wind_speed:9,condition_code:2,forecast:dates.map((date,i)=>({date,condition_code:[2,0,61,2][i],temp_max:[25,27,21,23][i],temp_min:[14,15,13,12][i],precipitation_probability:[15,5,75,20][i],precipitation_sum:[0.2,0,5.8,0.4][i]}))}});
+function resize(){document.querySelector('#weather-stage').style.transform=`scale(${document.querySelector('#frame').clientWidth/1480})`};resize();window.addEventListener('resize',resize);
+</script></html>

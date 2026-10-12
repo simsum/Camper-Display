@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="de"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Camper Uhr · sieben Uhrmodule</title>
+<link rel="stylesheet" href="../frontend/css/layout.css">
+<link rel="stylesheet" href="../frontend/css/nixie.css?v=0.5.1b">
+<link rel="stylesheet" href="../frontend/css/clock-designs.css?v=0.6.6-led2">
+<style>
+html,body{height:auto;min-height:100%;display:block;overflow:auto;cursor:auto;background:#111720;color:#e4eaf2}body{padding:20px;font:16px 'Segoe UI',sans-serif}h1{font-size:23px;margin-bottom:8px}p{color:#b7c4d6;margin:7px 0 14px}.controls{display:flex;flex-wrap:wrap;gap:16px;align-items:center;margin-bottom:20px}button,input{font:inherit}button{padding:7px 12px;background:#27374b;color:#eee;border:1px solid #5c708c;border-radius:5px}h2{font-size:16px;font-weight:500;margin:20px 0 8px}.frame{overflow:hidden;background:#000;border:1px solid #40516a;border-radius:7px}.canvas{position:relative;width:1480px;height:320px;transform-origin:top left}details{margin-top:24px}summary{cursor:pointer;padding:10px 0}#result{color:#c6ddb7}a{color:#9accff}
+</style>
+<h1>Sieben eigenständige Uhrmodule</h1>
+<p>Jede Uhr erhält ihre eigene Position, Aktivierung und Anzeigedauer für Stand und Fahrt. Vorschau mit dem tatsächlichen Modulcode, ohne Änderungen am Pi.</p>
+<div class="controls"><label><input id="live" type="checkbox" checked> Aktuelle Uhrzeit</label><label>Testzeit <input id="time" type="datetime-local" step="1" value="2026-09-11T21:34:28"></label><label><input id="time24" type="checkbox" checked> 24-Stunden-Format</label><button id="test" type="button">Alle sieben Module prüfen</button><span id="result" role="status"></span></div>
+<div id="new-clocks"></div>
+<div class="controls"><label>Panorama · Sonnendaten für die Vorschau <select id="solar-example"><option value="normal">Beispiel: 06:44 – 19:41</option><option value="summer">Sommerbeispiel: 05:10 – 21:30</option><option value="winter">Winterbeispiel: 08:10 – 16:20</option><option value="missing">Keine aktuellen Sonnendaten</option></select></label></div>
+<p>Nur die Vorschau verwendet diese Beispieldaten. Im Kiosk kommen die Sonnenzeiten aus denselben Standortdaten wie im Modul „Himmel“.</p>
+<div class="controls"><button id="midnight" type="button">Linearuhr: Mitternacht abspielen</button><button id="motion-test" type="button">Gleitbewegung prüfen</button><span id="motion-result" role="status"></span></div>
+<div class="controls"><button id="led-demo" type="button">LED-Refresh abspielen</button><span>HH:MM · zufälliges Durchrattern · etwa 1,5 Sekunden</span></div>
+<div class="controls"><button id="marble-demo" type="button">Kugelbahn abspielen</button><span>HH:MM · fünf Sekunden beim Minutenwechsel · im Ruhezustand keine Animation</span></div>
+<details><summary>Flip, Blau und Schlicht anzeigen</summary><div id="image-clocks"></div></details>
+<script src="../frontend/js/themes.js"></script>
+<script src="../frontend/js/screens/clock.js?v=0.6.0"></script>
+<script src="../frontend/js/screens/clock-designs.js?v=0.6.6-led2"></script>
+<script src="../frontend/js/screens/clock-marble.js?v=0.6.0"></script>
+<script>
+NIXIE_THEMES.forEach(theme=>theme.path='../frontend/'+theme.path);
+const definitions=[['Panorama',createPanoramaClockScreen],['Bahnhofs-LED',createLedClockScreen],['Linear',createLinearClockScreen],['Flip',s=>createClockScreen(s,'flip')],['Blau',s=>createClockScreen(s,'blue')],['Schlicht',s=>createClockScreen(s,'blank')],['Kugelbahn',createMarbleClockScreen]];
+const settings={time_format_24h:true,theme:'flip',theme_background_colors:{}};
+const modules=definitions.map(([name,factory],index)=>{const section=document.createElement('section');const title=document.createElement('h2');title.textContent=name;const frame=document.createElement('div');frame.className='frame';const canvas=document.createElement('div');canvas.className='canvas';const screen=factory(settings);screen.element.classList.add('screen-active');canvas.appendChild(screen.element);frame.appendChild(canvas);section.append(title,frame);document.querySelector((index<3||index===6)?'#new-clocks':'#image-clocks').appendChild(section);return screen});
+function fit(){document.querySelectorAll('.canvas').forEach(c=>{const scale=c.parentElement.clientWidth/1480;c.style.transform=`scale(${scale})`;c.parentElement.style.height=`${320*scale}px`})}
+function solarExample(now){const selected=document.querySelector('#solar-example').value;if(selected==='missing')return {weather:{available:false}};const [rise,set]=({normal:['06:44','19:41'],summer:['05:10','21:30'],winter:['08:10','16:20']})[selected];const day=`${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`;return {server_time_iso:now.toISOString(),weather:{available:true,sunrise:day+'T'+rise,sunset:day+'T'+set}};}
+function update(){settings.time_format_24h=document.querySelector('#time24').checked;const now=document.querySelector('#live').checked?new Date():new Date(document.querySelector('#time').value);if(!Number.isFinite(now.getTime()))return;modules.forEach(screen=>screen.onTick(solarExample(now),settings,now))}
+document.querySelector('#solar-example').onchange=()=>{update();modules[0].element.scrollIntoView({block:'center'})};
+window.addEventListener('resize',fit);document.querySelector('details').addEventListener('toggle',fit);document.querySelector('#time').oninput=()=>{document.querySelector('#live').checked=false;update()};document.querySelector('#live').onchange=update;document.querySelector('#time24').onchange=update;
+let testing=false,demoSteps=0;
+setInterval(()=>{if(!testing){if(demoSteps>0){const input=document.querySelector('#time');const next=new Date(new Date(input.value).getTime()+1000);input.value=`${next.getFullYear()}-${String(next.getMonth()+1).padStart(2,'0')}-${String(next.getDate()).padStart(2,'0')}T${String(next.getHours()).padStart(2,'0')}:${String(next.getMinutes()).padStart(2,'0')}:${String(next.getSeconds()).padStart(2,'0')}`;demoSteps--;}update()}},1000);fit();update();
+document.querySelector('#midnight').onclick=()=>{document.querySelector('#live').checked=false;document.querySelector('#time').value='2026-12-31T23:59:57';demoSteps=7;update();modules[2].element.scrollIntoView({block:'center'})};
+document.querySelector('#led-demo').onclick=()=>{document.querySelector('#live').checked=false;document.querySelector('#time').value='2026-09-11T21:34:58';demoSteps=4;update();modules[1].element.scrollIntoView({block:'center'})};
+document.querySelector('#marble-demo').onclick=()=>{document.querySelector('#live').checked=false;document.querySelector('#time').value='2026-09-11T21:34:58';demoSteps=9;update();modules[6].element.scrollIntoView({block:'center'})};
+document.querySelector('#motion-test').onclick=async()=>{
+ testing=true;demoSteps=0;const result=document.querySelector('#motion-result');const screen=modules[2],tracks=Array.from(screen.element.querySelectorAll('.clock-ruler-track'));const nodes=tracks.map(t=>Array.from(t.children));
+ try{
+  const config={...settings,time_format_24h:true};
+  screen.onTick(null,config,new Date(2026,11,31,23,59,59));
+  screen.onTick(null,config,new Date(2027,0,1,0,0,0));
+  const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(!reduced){
+   if(!tracks.every(t=>t.getAnimations().length===1))throw Error('Nicht alle drei Skalen gleiten');
+   await new Promise(resolve=>setTimeout(resolve,100));
+   if(!tracks.every(t=>getComputedStyle(t).transform!=='none'))throw Error('Keine Verschiebung');
+   await Promise.all(tracks.flatMap(t=>t.getAnimations().map(a=>a.finished)));
+  }
+  if(tracks.some(t=>t.getAnimations().length))throw Error('Animation beendet sich nicht');
+  if(Array.from(screen.element.querySelectorAll('.clock-tick.active'),e=>e.textContent).join('')!=='000000')throw Error('Mitternacht falsch');
+  if(!tracks.every((t,i)=>Array.from(t.children).every((n,j)=>n===nodes[i][j])))throw Error('DOM wurde neu aufgebaut');
+  screen.onTick(null,config,new Date(2027,0,1,0,0,1));
+  screen.onTick(null,config,new Date(2027,0,1,0,0,1));
+  if(!reduced && tracks[2].getAnimations().length!==1)throw Error('Doppelter Tick unterbricht Bewegung');
+  screen.onUnmount();if(tracks.some(t=>t.getAnimations().length))throw Error('Unsichtbare Uhr animiert weiter');
+  screen.onTick(null,config,new Date(2027,0,1,0,30,2));if(tracks.some(t=>t.getAnimations().length))throw Error('Zeitsprung animiert');
+  result.textContent=reduced?'Reduzierte Bewegung aktiv · direkte Wechsel geprüft.':'Gleitbewegung geprüft: 59 → 00, 23 → 00, doppelte Ticks, Modulwechsel, Zeitsprung.';
+ }catch(error){result.textContent='Fehler: '+error.message}finally{testing=false;update()}
+};
+document.querySelector('#test').onclick=async()=>{
+ testing=true;const result=document.querySelector('#result');result.textContent='Prüfung läuft …';
+ const controls=Array.from(document.querySelectorAll('button,input,select'));controls.forEach(control=>control.disabled=true);
+ try{
+  await Promise.all(Array.from(document.querySelectorAll('.nixie-aligned-tube img'),img=>img.decode()));
+  const cases=[new Date(2026,8,11,21,34,28),new Date(2026,11,31,23,59,59),new Date(2027,0,1,0,0,0),new Date(2026,8,11,12,0,0),new Date(2028,1,29,1,2,3)];let checks=0;
+  for(const time24 of [true,false])for(const now of cases){
+   const config={...settings,time_format_24h:time24};const p=clockDisplayParts(now,config),expected=p.hh+p.mm+p.ss;
+   modules.forEach(screen=>screen.onTick(null,config,now));
+   if(modules[1].element.querySelector('.clock-matrix').dataset.refreshing==='true')await new Promise(resolve=>setTimeout(resolve,1800));
+   if(modules[0].element.querySelector('[data-clock="hm"]').textContent!==p.hh+':'+p.mm)throw Error('Panorama-Uhrzeit');
+   if(modules[0].element.querySelector('[data-clock="year"]').textContent!==String(now.getFullYear()))throw Error('Datumswechsel');
+   const matrix=modules[1].element.querySelectorAll('.clock-matrix-digit');
+   if(matrix.length!==4)throw Error('LED-Stellen');
+   matrix.forEach((el,i)=>{const bits=Array.from(el.children,d=>d.classList.contains('on')?'1':'0').join('');if(bits!==CLOCK_LED_GLYPHS[Number(expected[i])])throw Error('LED-Ziffer')});
+   const centers=Array.from(modules[2].element.querySelectorAll('.clock-tick.active'),e=>e.textContent).join('');if(centers!==expected)throw Error('Linearskalen');
+   for(let i=3;i<6;i++){const el=modules[i].element;const values=i===3?Array.from(el.querySelectorAll('.nixie-img-digit:not(.nixie-img-colon)'),img=>img.getAttribute('src').match(/([0-9])\.png$/)[1]).join(''):Array.from(el.querySelectorAll('.nixie-aligned-tube:not(:nth-child(3)):not(:nth-child(6))'),e=>e.getAttribute('aria-label')).join('');if(values!==expected)throw Error(definitions[i][0]+' Ziffern');}
+   if(modules[6].element.querySelector('canvas').dataset.time!==p.hh+p.mm)throw Error('Kugelbahn-Uhrzeit');
+   checks+=7;
+  }
+  const solarNow=new Date(2026,8,11,12),solarStatus={server_time_iso:solarNow.toISOString(),weather:{available:true,sunrise:'2026-09-11T06:44',sunset:'2026-09-11T19:41'}};
+  modules[0].onTick(solarStatus,settings,solarNow);
+  const band=modules[0].element.querySelector('.clock-dayband');
+  if(band.dataset.solarAvailable!=='true'||!band.style.background.includes('28.0556%'))throw Error('Sonnenzeiten nicht im Farbverlauf');
+  if(modules[0].element.querySelector('[data-clock="sun-times"]').textContent!=='↑ 06:44 · ↓ 19:41')throw Error('Sonnenzeiten fehlen');
+  modules[0].onTick({weather:{available:false}},settings,solarNow);
+  if(band.dataset.solarAvailable!=='false'||!modules[0].element.querySelector('[data-clock="sun-times"]').textContent.includes('Keine aktuellen'))throw Error('Sonnendaten-Fallback');
+  const led=modules[1],ledElements=Array.from(led.element.querySelectorAll('.clock-matrix-digit'));
+  led.onTick(null,settings,new Date(2026,8,11,21,34,59));
+  led.onTick(null,settings,new Date(2026,8,11,21,35,0));
+  if(!matchMedia('(prefers-reduced-motion: reduce)').matches){
+    const matrixNode=led.element.querySelector('.clock-matrix'),run=matrixNode.dataset.refreshRun;
+    if(matrixNode.dataset.refreshing!=='true')throw Error('LED-Refresh fehlt');
+    led.onTick(null,settings,new Date(2026,8,11,21,35,0));
+    if(matrixNode.dataset.refreshRun!==run)throw Error('LED-Doppeltick startet erneut');
+    await new Promise(resolve=>setTimeout(resolve,600));
+    if(matrixNode.dataset.refreshing!=='true')throw Error('LED-Refresh zu kurz');
+    if(!ledElements.every(el=>CLOCK_LED_GLYPHS.includes(Array.from(el.children,d=>d.classList.contains('on')?'1':'0').join(''))))throw Error('Ungültige Zwischenziffer');
+    await new Promise(resolve=>setTimeout(resolve,1150));
+    if(matrixNode.dataset.refreshing!=='false')throw Error('LED-Refresh endet nicht');
+  }
+  led.onTick(null,settings,new Date(2026,8,11,21,35,1));
+  if(led.element.querySelector('.clock-matrix').dataset.refreshing==='true')throw Error('LED animiert bei Sekundenwechsel');
+  const target=clockDisplayParts(new Date(2026,8,11,21,35),settings);const finalDigits=target.hh+target.mm;
+  ledElements.forEach((el,i)=>{if(Array.from(el.children,d=>d.classList.contains('on')?'1':'0').join('')!==CLOCK_LED_GLYPHS[Number(finalDigits[i])])throw Error('LED endet auf falscher Ziffer')});
+  if(!/^(21|09):35(?: PM)?$/.test(led.element.getAttribute('aria-label')))throw Error('LED zeigt Sekunden');
+  led.onTick(null,settings,new Date(2026,8,11,21,35,59));
+  led.onTick(null,settings,new Date(2026,8,11,21,36,0));led.onUnmount();
+  if(led.element.querySelector('.clock-matrix').dataset.refreshing==='true')throw Error('LED animiert nach Modulwechsel');
+  result.textContent=`${checks} Modulprüfungen bestanden · Sonnenverlauf und LED-Refresh geprüft.`;
+ }catch(error){result.textContent='Fehler: '+error.message}finally{testing=false;controls.forEach(control=>control.disabled=false);update()}
+};
+</script></html>

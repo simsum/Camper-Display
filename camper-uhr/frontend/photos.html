@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>Fotos · Camper-Display</title>
+  <style>
+    :root { color-scheme: dark; font-family: system-ui,-apple-system,"Segoe UI",sans-serif; background:#081019; color:#eef4fa; }
+    * { box-sizing:border-box; }
+    body { margin:0; padding:env(safe-area-inset-top) 18px env(safe-area-inset-bottom); }
+    main { width:min(760px,100%); margin:0 auto; padding:28px 0 60px; }
+    h1 { margin:0 0 8px; font-size:clamp(28px,7vw,42px); }
+    p { color:#adbdcb; line-height:1.5; }
+    .upload { margin:24px 0; padding:22px; border:1px solid #304355; border-radius:18px; background:#101d29; }
+    .presentation { margin:24px 0; padding:22px; border:1px solid #304355; border-radius:18px; background:#101d29; }
+    .presentation h2 { margin:0 0 8px; }
+    .presentation label { display:flex; justify-content:space-between; align-items:center; gap:14px; color:#dce7ef; }
+    .presentation input { width:120px; padding:10px; border:1px solid #41576a; border-radius:8px; background:#172634; color:#eef4fa; font-size:17px; }
+    .actions { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:14px; }
+    .actions button { min-height:48px; border:0; border-radius:10px; font-size:16px; font-weight:750; }
+    #photo-frame-show { background:#f3b85d; color:#17202a; }
+    #photo-frame-hide { background:#8e3540; color:white; }
+    #photo-frame-status { min-height:24px; margin:12px 0 0; color:#cae2f4; }
+    input[type=file] { position:absolute; width:1px; height:1px; opacity:0; }
+    .choose { display:block; padding:16px; border-radius:12px; background:#f3b85d; color:#17202a; text-align:center; font-size:18px; font-weight:750; cursor:pointer; }
+    #progress { min-height:24px; margin:14px 0 0; color:#cae2f4; }
+    .summary { display:flex; justify-content:space-between; align-items:center; gap:12px; margin:28px 0 12px; }
+    .summary h2 { margin:0; }
+    #photos { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; }
+    .photo { position:relative; aspect-ratio:16/10; overflow:hidden; border-radius:13px; background:#162331; }
+    .photo img { width:100%; height:100%; object-fit:cover; }
+    .photo button { position:absolute; right:8px; top:8px; min-width:42px; min-height:42px; padding:0 13px; border:0; border-radius:21px; background:#111d; color:white; font-size:21px; font-weight:700; }
+    .photo button.confirm-delete { background:#c53030; font-size:15px; }
+    .photo button:disabled { opacity:.65; }
+    .empty { grid-column:1/-1; padding:35px 20px; border:1px dashed #3a4d5f; border-radius:14px; text-align:center; color:#91a4b5; }
+    a { color:#f3bf70; }
+    @media(min-width:620px){ #photos { grid-template-columns:repeat(3,minmax(0,1fr)); } }
+    @media(max-width:520px){ .actions { grid-template-columns:1fr; } .presentation label { align-items:flex-start; flex-direction:column; } }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Urlaubsfotos</h1>
+    <p>Fotos auswählen und direkt im Camper-WLAN auf Reisemomente übertragen. Die Bilder bleiben auf dem Camper.</p>
+    <section class="upload">
+      <label class="choose" for="photo-input">Fotos auswählen</label>
+      <input id="photo-input" type="file" accept="image/*" multiple>
+      <div id="progress" role="status"></div>
+      <p class="hint">Bei neuen Fotos werden Aufnahmedatum und – falls vorhanden – GPS-Ort übernommen. Zur Bestimmung des Ortsnamens werden die GPS-Koordinaten einmalig an OpenStreetMap/Nominatim gesendet.</p>
+    </section>
+    <section class="presentation">
+      <h2>Reisemomente</h2>
+      <p>Die Präsentation wird nur manuell gestartet und endet nach der gewählten Zeit.</p>
+      <label>Anzeigedauer (Sekunden)
+        <input id="photo-frame-duration" type="number" min="30" max="3600" value="300">
+      </label>
+      <div class="actions">
+        <button id="photo-frame-show" type="button">Reisemomente anzeigen</button>
+        <button id="photo-frame-hide" type="button">Reisemomente beenden</button>
+      </div>
+      <div id="photo-frame-status" role="status">Nicht aktiv.</div>
+    </section>
+    <div class="summary"><h2>Auf dem Display</h2><span id="count"></span></div>
+    <div id="photos"></div>
+    <p><a href="/settings">Zurück zu den Einstellungen</a></p>
+  </main>
+  <script src="js/photo-metadata.js?v=0.7.0-meta1"></script>
+  <script src="js/photo-upload.js?v=0.7.0-meta1"></script>
+</body>
+</html>

@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=1480, initial-scale=1">
+  <link rel="stylesheet" href="../frontend/css/layout.css">
+  <link rel="stylesheet" href="../frontend/css/modern.css">
+  <style>html,body{width:1480px;height:320px}#stage{--stage-width:1480px;--stage-height:320px}</style>
+</head>
+<body>
+  <div id="stage"><div id="screens"></div></div>
+  <script src="../frontend/js/screens/calendar.js"></script>
+  <script>
+    const active = new URLSearchParams(location.search).has("active");
+    const vacations = [
+      {id:"1",name:"Ostern",destination:"Allgäu",start_date:"2026-04-04",end_date:"2026-04-11",enabled:true},
+      {id:"2",name:"Sommerreise",destination:"Frankreich",start_date:"2026-07-02",end_date:"2026-07-16",enabled:true},
+      {id:"3",name:"Herbsttour",destination:"Südtirol",start_date:"2026-10-03",end_date:"2026-10-12",enabled:true},
+      {id:"4",name:"Weihnachten",destination:"Tirol",start_date:"2026-12-24",end_date:"2027-01-03",enabled:true}
+    ];
+    if (active) vacations.push({id:"5",name:"Italien & Südtirol",destination:"Dolomiten und Gardasee",start_date:"2026-09-07",end_date:"2026-09-21",enabled:true});
+    const screen = createCalendarScreen();
+    document.getElementById("screens").appendChild(screen.element);
+    screen.onTick({server_time_iso:"2026-09-10T12:00:00+02:00"},{vacations});
+  </script>
+</body>
+</html>

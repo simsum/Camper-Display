@@ -1,0 +1,376 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Camper-Display – Einstellungen</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      font-family: "Segoe UI", Roboto, sans-serif;
+      background: #111;
+      color: #eee;
+      margin: 0;
+      padding: 16px;
+    }
+    h1 { font-size: 20px; color: #ff8c3a; }
+    fieldset {
+      border: 1px solid #333;
+      border-radius: 8px;
+      margin-bottom: 16px;
+      padding: 12px;
+    }
+    legend { color: #ff8c3a; padding: 0 6px; }
+    label {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 0;
+      font-size: 16px;
+    }
+    input[type="text"], input[type="password"], input[type="number"], input[type="time"], input[type="date"] {
+      background: #222;
+      color: #eee;
+      border: 1px solid #444;
+      border-radius: 4px;
+      padding: 6px 8px;
+      width: 140px;
+      font-size: 16px;
+    }
+    .hint { font-size: 13px; color: #888; margin: -4px 0 8px; }
+    .screen-order { display: flex; flex-direction: column; gap: 6px; }
+    .screen-row {
+      display: grid;
+      grid-template-columns: minmax(130px, 1fr) minmax(150px, auto) minmax(150px, auto) auto;
+      align-items: center;
+      gap: 8px;
+      background: #1a1a1a;
+      border-radius: 6px;
+      padding: 8px;
+    }
+    .screen-row input[type="checkbox"] { width: 20px; height: 20px; flex-shrink: 0; }
+    .screen-row span.name { flex: 1; opacity: 1; }
+    .screen-row .mode-cell { padding: 0; justify-content: flex-start; gap: 6px; font-size: 13px; }
+    .screen-row .duration { width: 62px; }
+    .screen-row .order-buttons { display: flex; gap: 4px; }
+    .screen-row button {
+      background: #333;
+      color: #eee;
+      border: none;
+      border-radius: 4px;
+      padding: 4px 10px;
+      font-size: 14px;
+    }
+    .theme-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+    .theme-option {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      background: #1a1a1a;
+      border: 2px solid #333;
+      border-radius: 8px;
+      padding: 8px;
+      cursor: pointer;
+    }
+    .theme-option.selected { border-color: #ff8c3a; }
+    .theme-option img { height: 70px; width: auto; object-fit: contain; }
+    .theme-option .placeholder {
+      height: 70px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      color: #ff8c3a;
+    }
+    .theme-option span.label { font-size: 12px; text-align: center; color: #ccc; }
+    .theme-option input[type="color"] {
+      width: 36px;
+      height: 22px;
+      padding: 0;
+      border: 1px solid #444;
+      border-radius: 4px;
+      background: none;
+      cursor: pointer;
+    }
+    button.primary {
+      background: #ff8c3a;
+      color: #111;
+      border: none;
+      border-radius: 6px;
+      padding: 12px;
+      width: 100%;
+      font-size: 16px;
+      font-weight: bold;
+      margin-top: 8px;
+    }
+    .settings-link-button {
+      display: block;
+      margin-top: 12px;
+      padding: 12px;
+      border-radius: 6px;
+      background: #ff8c3a;
+      color: #111;
+      text-align: center;
+      text-decoration: none;
+      font-size: 16px;
+      font-weight: bold;
+    }
+    button.danger {
+      background: #a33;
+      color: #eee;
+      border: none;
+      border-radius: 6px;
+      padding: 12px;
+      width: 100%;
+      font-size: 16px;
+      margin-top: 8px;
+    }
+    #status-msg { margin-top: 12px; text-align: center; color: #8f8; min-height: 20px; }
+    .button-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+    .button-row button { margin-top: 8px; }
+    .button-row.photo-frame-actions { grid-template-columns: repeat(2, 1fr); }
+    .vacation-settings-list { display: flex; flex-direction: column; gap: 10px; }
+    .vacation-settings-row {
+      display: grid;
+      grid-template-columns: 42px minmax(150px, 1fr) minmax(150px, 1fr) 145px 145px auto;
+      align-items: center;
+      gap: 8px;
+      padding: 10px;
+      border-radius: 8px;
+      background: #1a1a1a;
+    }
+    .vacation-settings-row input { width: 100%; }
+    .vacation-settings-row input[type="checkbox"] { width: 22px; height: 22px; }
+    .vacation-settings-row button {
+      padding: 8px 10px;
+      border: 0;
+      border-radius: 5px;
+      color: #eee;
+      background: #933;
+      cursor: pointer;
+    }
+    .vacation-empty { padding: 14px; color: #888; text-align: center; border: 1px dashed #444; border-radius: 8px; }
+    @media (max-width: 680px) {
+      .screen-row { grid-template-columns: 1fr; }
+      .screen-row .order-buttons { justify-content: flex-end; }
+      .button-row { grid-template-columns: 1fr; }
+      .button-row.photo-frame-actions { grid-template-columns: 1fr; }
+      .vacation-settings-row { grid-template-columns: 36px 1fr; }
+      .vacation-settings-row input:not([type="checkbox"]), .vacation-settings-row button { grid-column: 1 / -1; }
+    }
+  </style>
+  <link rel="stylesheet" href="css/settings-layout.css?v=0.6.4">
+</head>
+<body>
+  <h1>Camper-Display – Einstellungen</h1>
+  <p class="settings-intro">Alles für unterwegs. Öffne den Bereich, den du ändern möchtest.</p>
+  <div id="traccar-settings"></div>
+
+  <fieldset id="section-modules">
+    <legend>Module und gemeinsame Reihenfolge</legend>
+    <div class="hint">Jedes Modul kann für Stand und Fahrt getrennt aktiviert und zeitlich eingestellt werden.</div>
+    <div class="screen-order" id="screen-order"></div>
+  </fieldset>
+
+  <fieldset id="section-photos">
+    <legend>Reisemomente</legend>
+    <div class="hint">Fotos vom iPhone oder Android-Gerät direkt über das Camper-WLAN übertragen und verwalten. Reisemomente startet nur auf Knopfdruck und unterbricht die normale Anzeige für die gewählte Zeit.</div>
+    <a class="settings-link-button" href="/photos">Fotoseite öffnen</a>
+    <label>Anzeigedauer nach manuellem Start (Sekunden)
+      <input type="number" id="photo-frame-duration" min="30" max="3600" value="300">
+    </label>
+    <div class="button-row photo-frame-actions">
+      <button class="primary" id="photo-frame-show" type="button">Reisemomente anzeigen</button>
+      <button class="danger" id="photo-frame-hide" type="button">Reisemomente beenden</button>
+    </div>
+    <div class="hint" id="photo-frame-status">Nicht aktiv.</div>
+  </fieldset>
+
+  <fieldset id="section-colors">
+    <legend>Hintergrundfarben · Flip und Röhren</legend>
+    <div class="hint">Alle sieben Uhren sind oben einzeln als Module auswählbar. Hier stellst du die Hintergrundfarbe für Flip, Blau und Schlicht ein.</div>
+    <div class="theme-grid" id="theme-grid"></div>
+  </fieldset>
+
+  <fieldset id="section-display">
+    <legend>Anzeige</legend>
+    <label>Zeitformat 24h
+      <input type="checkbox" id="time24" />
+    </label>
+    <label>Helligkeit im Stand (%)
+      <input type="number" id="brightness-stand" min="10" max="100" />
+    </label>
+    <label>Helligkeit während der Fahrt (%)
+      <input type="number" id="brightness-drive" min="10" max="100" />
+    </label>
+    <label>Deckkraft der Informationsrahmen (%)
+      <input type="number" id="panel-opacity" min="10" max="95" />
+    </label>
+    <div class="hint">Gilt gemeinsam für Wetter, Himmel sowie Datum &amp; Urlaub. Ein kleiner Wert macht die Rahmen transparenter.</div>
+    <label>Hintergrund-Unschärfe in den Rahmen (px)
+      <input type="number" id="panel-blur" min="0" max="16" />
+    </label>
+    <div class="hint">Gilt ebenfalls für alle drei Module. 0 zeigt das Hintergrundbild scharf, 16 zeichnet es stark weich.</div>
+  </fieldset>
+
+  <fieldset id="section-night">
+    <legend>Nachtmodus und Display-Zeitplan</legend>
+    <label>Nachtzeitplan aktiv (nur im Stand)
+      <input type="checkbox" id="schedule-enabled" />
+    </label>
+    <label>Nacht beginnt um
+      <input type="time" id="off-time" />
+    </label>
+    <label>Nacht endet um
+      <input type="time" id="on-time" />
+    </label>
+    <label>Während der Nacht
+      <select id="night-behavior"><option value="clock">Nachtuhr</option><option value="off">Display aus</option><option value="normal">Normale Anzeige</option></select>
+    </label>
+    <label>Helligkeit der Nachtuhr (%)
+      <input type="number" id="brightness-night" min="1" max="100" />
+    </label>
+    <label>Schriftfarbe der Nachtuhr
+      <select id="night-color"><option value="amber">Bernstein</option><option value="red">Rot</option><option value="white">Warmweiß</option></select>
+    </label>
+    <label>Normale Anzeige nach Berührung der Nachtuhr (Sekunden)
+      <input type="number" id="night-wake-seconds" min="5" max="600" />
+    </label>
+    <div class="hint">Maximal große Stunden und Minuten ohne Animation. Nachts pausiert die Modulfolge; morgens kehren normale Anzeige und Helligkeit zurück. Gleiche Start- und Endzeit bedeutet kein Nachtfenster. Hardware-Helligkeit benötigt eine am Pi bestätigte Hintergrundbeleuchtungs-Schnittstelle; sonst wird das Bild abgedunkelt.</div>
+    <button class="primary" id="display-on-btn" type="button">Screen an</button>
+    <button class="danger" id="display-off-btn" type="button">Screen aus</button>
+    <div class="hint">„Screen aus“ bleibt bis „Screen an“ ausgeschaltet – auch bei Touch oder einem Zeitplanwechsel. Nach einem Dienst-/Pi-Neustart gilt wieder der Zeitplan. „Screen an“ zeigt nachts kurz die normale Anzeige.</div>
+    <label>Durch Touch aufwecken
+      <input type="checkbox" id="touch-wake-enabled" />
+    </label>
+    <label>Wach bleiben nach Touch bei automatischem „Display aus“ (Sekunden)
+      <input type="number" id="touch-wake-hold" min="5" max="600" />
+    </label>
+    <div class="hint">Der Touch-Sensor läuft unabhängig vom Bildsignal, daher funktioniert das auch wenn das Display gerade automatisch abgeschaltet ist.</div>
+  </fieldset>
+
+  <fieldset id="section-arrival">
+    <legend>Ankunftsanzeige</legend>
+    <label>Nach einer Fahrt einmal begrüßen <input type="checkbox" id="arrival-enabled" /></label>
+    <label>Angekommen nach (Sekunden Stillstand) <input type="number" id="arrival-wait" min="1" max="3600" /></label>
+    <label>Ankunft anzeigen für (Sekunden) <input type="number" id="arrival-duration" min="5" max="180" /></label>
+    <div class="hint">Erst nach bestätigter Fahrt und Wechsel in den Standmodus. Nachtzeitplan und „Screen aus“ haben Vorrang. Die Ortsabfrage übermittelt bei Ankunft die GPS-Koordinaten an OpenStreetMap/Nominatim und Open-Meteo; Text und Foto kommen von Wikipedia/Wikimedia. Ohne Verbindung entfallen fehlende Angaben und das Foto.</div>
+    <button type="button" id="arrival-test">Ankunft mit Simulationsort testen</button>
+    <div class="hint" id="arrival-test-status" role="status">Verwendet das Feld „Ort“ der GPS-Simulation. Diese muss nicht eingeschaltet sein. Ortsname und ermittelte Koordinaten werden für Ortsinformationen an die verwendeten Ortsdienste übertragen. GPS-Position und Fahrtmodus bleiben unverändert. Neue Zeiten bitte zuerst speichern.</div>
+  </fieldset>
+
+  <fieldset id="section-gps">
+    <legend>GPS (gpsd-Router)</legend>
+    <label>Routername oder GPS-IP
+      <input type="text" id="gpsd-host" placeholder="Zum Beispiel gpsd.example.org" />
+    </label>
+    <label>gpsd-Port
+      <input type="number" id="gpsd-port" />
+    </label>
+    <label>Fahrt ab Geschwindigkeit (km/h)
+      <input type="number" id="drive-enter-speed" min="1" max="50" step="0.5" />
+    </label>
+    <label>Fahrt nach Dauer (Sekunden)
+      <input type="number" id="drive-enter-seconds" min="1" max="120" />
+    </label>
+    <label>Stand unter Geschwindigkeit (km/h)
+      <input type="number" id="stand-enter-speed" min="0" max="30" step="0.5" />
+    </label>
+    <label>Stand nach Dauer (Sekunden)
+      <input type="number" id="stand-enter-seconds" min="10" max="1800" />
+    </label>
+    <label>Letzten Zustand bei GPS-Ausfall halten (Sekunden)
+      <input type="number" id="gps-hold-seconds" min="10" max="3600" />
+    </label>
+  </fieldset>
+
+  <fieldset id="section-simulation">
+    <legend>GPS-Simulation (zum Testen)</legend>
+    <label>Ort
+      <input type="text" id="sim-place" maxlength="120" placeholder="z.B. Bamberg" />
+    </label>
+    <label>Geschwindigkeit (km/h)
+      <input type="number" id="sim-speed" min="0" max="200" value="0" />
+    </label>
+    <label>Höhe (m, optional)
+      <input type="number" id="sim-altitude" min="-500" max="9000" placeholder="z.B. 540" />
+    </label>
+    <label>Fahrtrichtung (Grad, optional; 0 = Nord, 90 = Ost)
+      <input type="number" id="sim-heading" min="0" max="359.9" step="0.1" placeholder="z.B. 90" />
+    </label>
+    <button class="primary" id="sim-position-btn" type="button">Position simulieren</button>
+    <button class="danger" id="sim-disconnect-btn" type="button">Simulation beenden / echtes GPS</button>
+    <div class="button-row">
+      <button class="primary" id="force-stand-btn" type="button">Stand erzwingen</button>
+      <button class="primary" id="force-drive-btn" type="button">Fahrt erzwingen</button>
+      <button class="primary" id="force-auto-btn" type="button">Automatik</button>
+    </div>
+    <div class="hint">Position, Geschwindigkeit und optionale Höhe durchlaufen die echte Anzeige. Mit den drei Testschaltern lässt sich der Betriebszustand vorübergehend direkt wählen.</div>
+  </fieldset>
+
+  <fieldset id="section-map">
+    <legend>Karte</legend>
+    <label>Zoom bei Stand/langsam
+      <input type="number" id="map-zoom-near" min="1" max="19" />
+    </label>
+    <label>Zoom bei Autobahn/Überland
+      <input type="number" id="map-zoom-far" min="1" max="19" />
+    </label>
+    <label>Geschwindigkeit für Voll-Zoom (km/h)
+      <input type="number" id="map-zoom-threshold" min="10" max="200" />
+    </label>
+    <label>Fahrspur anzeigen
+      <input type="checkbox" id="map-trail-enabled" />
+    </label>
+    <label>Fahrspur-Dauer (Stunden)
+      <input type="number" id="map-trail-hours" min="1" max="24" />
+    </label>
+    <div class="hint">Die Fahrspur wird nur im Arbeitsspeicher gehalten (nicht gespeichert) und geht bei einem Neustart/Stromausfall automatisch verloren.</div>
+  </fieldset>
+
+  <fieldset id="section-weather">
+    <legend>Wetter</legend>
+    <label>Einheit Celsius
+      <input type="checkbox" id="celsius" />
+    </label>
+  </fieldset>
+
+  <fieldset id="section-calendar">
+    <legend>iCloud-Urlaubskalender</legend>
+    <label>Kalender verwenden
+      <input type="checkbox" id="calendar-enabled" />
+    </label>
+    <label for="calendar-url">Freigabelink</label>
+    <input type="password" id="calendar-url" style="width:100%" autocomplete="off" spellcheck="false" placeholder="webcal://…icloud.com/published/…" />
+    <div class="hint" style="margin-top:8px">Am iPhone: Kalender → ⓘ beim Urlaubskalender → Öffentlicher Kalender → Link teilen. Alle Termine dieses Kalenders werden als Urlaub übernommen. Jeder mit dem Link kann sie lesen.</div>
+    <button class="primary" id="calendar-refresh-btn" type="button">Speichern und jetzt aktualisieren</button>
+    <div id="calendar-sync-status" class="hint" style="margin-top:10px" role="status"></div>
+    <div class="hint">Automatischer Abruf alle 15 Minuten. Änderungen und Löschungen werden übernommen, sobald iCloud sie bereitstellt. Letzter geladener Stand bleibt auch ohne Internet und nach Neustarts verfügbar. Anzeigezeitraum: Vorjahr bis Ende des übernächsten Jahres. Termine werden als ganze Urlaubstage dargestellt.</div>
+    <div id="calendar-import-list"></div>
+  </fieldset>
+
+  <fieldset id="section-vacations">
+    <legend>Urlaubszeiten</legend>
+    <div class="hint">Beliebig viele Reisen. Sie bleiben dauerhaft gespeichert und werden beim Jahreswechsel nicht gelöscht. Deaktivierte Reisen erscheinen nicht in der Anzeige.</div>
+    <div class="vacation-settings-list" id="vacation-settings-list"></div>
+    <button class="primary" id="vacation-add-btn" type="button">Urlaub hinzufügen</button>
+  </fieldset>
+
+  <footer class="save-bar">
+    <div><span id="dirty-state" role="status" aria-live="polite">Einstellungen werden geladen …</span>
+      <small>Traccar wird unter „Verbindungen“ separat gespeichert.</small></div>
+    <button class="primary" id="save-btn" disabled>Änderungen speichern</button>
+    <div id="status-msg" role="status" aria-live="polite"></div>
+  </footer>
+
+  <script src="js/themes.js?v=0.5.1b"></script>
+  <script src="js/settings-layout.js?v=0.7.0-photo1"></script>
+  <script src="js/settings.js?v=0.7.0-photo1"></script>
+  <script src="js/traccar-settings.js?v=0.6.0-traccar1"></script>
+</body>
+</html>

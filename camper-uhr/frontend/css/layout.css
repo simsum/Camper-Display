@@ -1,0 +1,92 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+  background: #000;
+  overflow: hidden;
+  font-family: "Segoe UI", Roboto, sans-serif;
+  cursor: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Fixed design canvas at the configured display resolution (default
+   1480x320). Scaled to fit whatever window/screen it actually runs on,
+   so the layout always matches the physical bar display 1:1 when sized
+   correctly, but still renders sensibly at other sizes for testing. */
+#stage {
+  position: relative;
+  width: var(--stage-width, 1480px);
+  height: var(--stage-height, 320px);
+  transform-origin: center center;
+  flex-shrink: 0;
+}
+
+/* A simple translucent layer is more reliable than CSS filter: brightness()
+   on the Pi's rotated, hardware-accelerated Chromium surface. */
+#display-dimmer {
+  position: absolute;
+  inset: 0;
+  z-index: 1000;
+  background: #000;
+  opacity: 0;
+  pointer-events: none;
+}
+
+#screens {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.screen {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  color: #ff8c3a;
+}
+
+.screen.screen-active {
+  display: flex;
+}
+
+.screen-label {
+  position: absolute;
+  top: 8px;
+  left: 16px;
+  font-size: 12px;
+  letter-spacing: 2px;
+  color: #663;
+  text-transform: uppercase;
+}
+
+.map-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 4fr) minmax(0, 1fr);
+  width: 100%;
+  height: 100%;
+}
+
+.map-pane {
+  position: relative;
+  min-width: 0;
+  height: 100%;
+  overflow: hidden;
+}
+
+.map-container {
+  width: 100%;
+  height: 100%;
+}
